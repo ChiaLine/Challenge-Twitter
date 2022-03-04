@@ -1,5 +1,4 @@
-// src/components/SetProfile.vue
-// 給Regist.vue使用
+// src/components/SetProfile.vue // 給Regist.vue使用
 <template>
   <form
     class="d-flex flex-column align-items-center w-100"
@@ -18,10 +17,12 @@
         @focusout="wordLimit(user[form.type])"
         :id="form.id"
         class="w-100 input"
+        :class="{'account-input': form.category === 'account', 'regist': !show}"
         :type="form.category"
         :name="form.category"
         required
       />
+      <span :class="{'account-input-text': form.category === 'account'}" v-if="form.category === 'account'" v-show="show">@</span>
       <span
         class="position-absolute warning"
         v-show="isNameWarning"
@@ -88,6 +89,7 @@ export default {
       ],
       nameWarning: "字數超出上限!",
       isNameWarning: false,
+      show: false,
     };
   },
   computed: {
@@ -97,12 +99,15 @@ export default {
     this.getcurrentUser();
   },
   methods: {
-    getcurrentUser(){
+    getcurrentUser() {
       if (this.$route.name === "Regist") {
+        // 新增class條件＆當前頁面是否出現@判斷
+        this.show = false
         this.user = {
           ...this.user,
         };
       } else if (this.$route.name === "Setting") {
+        this.show = true
         this.user = {
           ...this.user,
           ...this.currentUser,
@@ -139,7 +144,18 @@ export default {
 };
 </script>
 
-
 <style scoped lang="scss">
 @import "../assets/scss/register-login.scss";
+// 新增class條件＆當前頁面是否出現@判斷
+.account-input {
+  padding-left: 25px;
+}
+.account-input.regist {
+  padding-left: 10px;
+}
+.account-input-text {
+  position: absolute;
+  left: 9px;
+  bottom: 9px;
+}
 </style>
