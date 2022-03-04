@@ -81,6 +81,18 @@ const router = new VueRouter({
       component: () => import('../views/Setting.vue')
     },
     {
+      path: '/Chatroom',
+      name: 'Chatroom',
+      beforeEnter: authorizeIsUser,
+      component: () => import('../views/Chatroom.vue')
+    },
+    {
+      path: '/Message',
+      name: 'Message',
+      beforeEnter: authorizeIsUser,
+      component: () => import('../views/Message.vue')
+    },
+    {
       path: '/User',
       name: 'User',
       redirect: '/User/Main',
@@ -91,6 +103,11 @@ const router = new VueRouter({
           path: 'Main',
           name: 'Main',
           component: () => import('../views/Main.vue'),
+        },
+        {
+          path: 'Notify',
+          name: 'Notify',
+          component: () => import('../views/Notify.vue'),
         },
         {
           path: 'ReplyList/:id',
