@@ -98,7 +98,7 @@ password : 12345678
 ## 安裝專案
 1. Clone 專案到本地
 ```
-git clone https://github.com/ChiaLine/Simple-Twitter.git
+git clone https://github.com/ChiaLine/Challenge-Twitter.git
 ```
 2. 進入此專案資料夾
 ```
