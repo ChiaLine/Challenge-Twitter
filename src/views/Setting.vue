@@ -41,7 +41,7 @@ export default {
     },
     async handleAfterSubmit([account, name, email, password, checkPassword]) {
       try {
-        const response = await getUserDataAPI.update(this.currentUser.id, {
+        await getUserDataAPI.update(this.currentUser.id, {
           account,
           name,
           email,
