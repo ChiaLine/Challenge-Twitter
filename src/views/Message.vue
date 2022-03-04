@@ -5,9 +5,11 @@
       <MessageUserCards />
     </div>
     <div class="message-content">
+      <div class="message-content-title">
         <p class="message-content-name">name</p>
         <span class="message-content-account">@account</span>
-        <div class="m-5">未處理 個人聊天 輸入框 內容區 ???????</div>
+      </div>
+      <!-- <div class="m-5">未處理 個人聊天 輸入框 內容區 ???????</div> -->
     </div>
     <TweetModal v-if="showModal" @after-hide-modal="afterHideModal" />
   </div>
@@ -53,6 +55,11 @@ export default {
 }
 .message-content {
   min-width: 600px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.message-content-title {
   height: 74px;
   border-bottom: 1px solid #e6ecf0;
 }
