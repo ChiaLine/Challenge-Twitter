@@ -102,7 +102,7 @@ git clone https://github.com/ChiaLine/Simple-Twitter.git
 ```
 2. 進入此專案資料夾
 ```
-cd Simple-Twitter
+cd Challenge-Twitter
 ```
 3. 安裝套件
 ```
