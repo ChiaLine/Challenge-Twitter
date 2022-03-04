@@ -47,21 +47,17 @@ export default {
   methods: {
     // Tweet Modal
     afterShowTweetModal() {
-      console.log("afterShowModal--user");
       this.showTweetModal = true;
     },
     afterHideTweetModal() {
-      console.log("afterHideModal--user");
       this.showTweetModal = false;
     },
     // ReplyModal
     afterShowReplyModal(replyTweetId) {
-      console.log("Reply--user", replyTweetId);
       this.showReplyModal = true;
       this.replyTweetId = replyTweetId;
     },
     afterHideReplyModal() {
-      console.log("hide--user");
       this.showReplyModal = false;
     },
     // UserEditModal

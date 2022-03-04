@@ -32,11 +32,9 @@ export default {
   },
   methods: {
     afterShowTweetModal() {
-      console.log("afterShowModal--Setting");
       this.showModal = true;
     },
     afterHideModal() {
-      console.log("afterHideModal--Setting");
       this.showModal = false;
     },
   },

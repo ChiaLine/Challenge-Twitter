@@ -124,7 +124,6 @@ export default {
     wordLimit(data) {
       if (data.length > 50) {
         event.target.classList.add("error");
-        console.log(event.target.classList);
         this.isNameWarning = true;
       } else {
         event.target.classList.remove("error");

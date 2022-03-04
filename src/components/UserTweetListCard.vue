@@ -266,7 +266,6 @@ export default {
     },
     async fetchUserReplyTweets(userId) {
       try {
-        console.log("ReplyTweets", userId);
         const { data } = await userTweetsAPI.getUserRepliedTweets(userId);
         this.userRepliedTweets = data;
 
@@ -366,7 +365,6 @@ export default {
     toUserPage(userID) {
       // 判斷
       if (userID === this.currentUser.id && this.$route.name !== "UserSelf") {
-        console.log("egg");
         this.$router.push({ name: "UserSelf" });
         return;
       }
@@ -379,7 +377,6 @@ export default {
         this.$route.name === "UserOther" &&
         Number(this.$route.params.id) === userID
       ) {
-        console.log("跳出");
         return;
       }
       
@@ -400,7 +397,6 @@ export default {
     },
     toReplyList(tweetId) {
       // 點選區塊後轉址到 未處理
-      console.log("toReplyList",tweetId);
       this.$router.push({ name: 'ReplyList', params: { id: tweetId } });
 
     },

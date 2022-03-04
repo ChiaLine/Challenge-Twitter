@@ -34,7 +34,6 @@ const authorizeIsUser = async (to, from, next) => {
   // localStorage 有 token 才驗證 & 比較 store 中的 token 是否一樣
   if (tokenInLocalStorage && tokenInLocalStorage !== tokenInStore) {
     // 使用 dispatch 呼叫 Vuex 內的 actions
-    console.log('OK')
     isAuthenticated = await store.dispatch('fetchCurrentUser')
   }
   

@@ -102,13 +102,11 @@ export default {
       }
     },
     handleTweetCardReplyButton(replyTweetId) {
-      console.log("show reply nodal", replyTweetId);
       this.$emit("after-show-reply-modal", replyTweetId);
     },
     async addTweetCardLike(id) {
       try {
         this.isProcessing = true;
-        console.log(id);
         await tweetAPI.addTweetLike(id);
         await this.fetchTweetCards();
 

@@ -34,11 +34,9 @@ export default {
   },
   methods: {
     afterShowTweetModal() {
-      console.log("afterShowModal--Setting");
       this.showModal = true;
     },
     afterHideModal() {
-      console.log("afterHideModal--Setting");
       this.showModal = false;
     },
     async handleAfterSubmit([account, name, email, password, checkPassword]) {
@@ -50,7 +48,6 @@ export default {
           password,
           checkPassword,
         });
-        console.log(response);
         this.$router.go(0);
       } catch (e) {
         Toast.fire({
