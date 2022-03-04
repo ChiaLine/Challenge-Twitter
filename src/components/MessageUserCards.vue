@@ -1,0 +1,99 @@
+<template>
+  <div class="message">
+    <p class="message-title">訊息</p>
+    <div class="message-cards">
+      <div class="message-card d-flex justify-content-start align-items-center">
+        <img class="message-card-img" :src="null | emptyImage" />
+        <div class="message-content">
+          <p class="message-name">
+            name <span class="message-account"> @account </span>
+          </p>
+          <p class="message-description">description Nulla Lorem mollit cupidatat irure....</p>
+        </div>
+        <div class="message-time">時間</div>
+      </div>
+      <div class="message-card d-flex justify-content-start align-items-center">
+        <img class="message-card-img" :src="null | emptyImage" />
+        <div class="message-content">
+          <p class="message-name">
+            name <span class="message-account"> @account </span>
+          </p>
+          <p class="message-description">description Nulla Lorem mollit cupidatat irure....</p>
+        </div>
+        <div class="message-time">時間</div>
+      </div>
+      <div class="message-card d-flex justify-content-start align-items-center">
+        <img class="message-card-img" :src="null | emptyImage" />
+        <div class="message-content">
+          <p class="message-name">
+            name <span class="message-account"> @account </span>
+          </p>
+          <p class="message-description">description Nulla Lorem mollit cupidatat irure....</p>
+        </div>
+        <div class="message-time">時間</div>
+      </div>
+      <div class="message-card d-flex justify-content-start align-items-center">
+        <img class="message-card-img" :src="null | emptyImage" />
+        <div class="message-content">
+          <p class="message-name">
+            name <span class="message-account"> @account </span>
+          </p>
+          <p class="message-description">description Nulla Lorem mollit cupidatat irure....</p>
+        </div>
+        <div class="message-time">時間</div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { emptyImageFilter } from "../utils/mixins";
+
+export default {
+  name: "MessageUsersCards",
+  mixins: [emptyImageFilter],
+};
+</script>
+
+<style scoped style lang="scss">
+@import "../assets/scss/_color.scss";
+.message {
+  width: 390px;
+}
+.message-title {
+  height: 74px;
+  line-height: 74px;
+  padding-left: 23px;
+  font-size: 24px;
+  font-weight: 700;
+  border-bottom: 1px solid $modal-outline;
+}
+.message-card {
+  position: relative;
+  padding: 10px 10px 10px 15px;
+  border-bottom: 1px solid $modal-outline;
+}
+
+.message-card-img {
+  width: 50px;
+  height: 50px;
+}
+.message-content {
+  margin-left: 10px;
+}
+.message-name {
+  font-weight: 700;
+}
+.message-description {
+  width: 300px;
+}
+.message-account {
+  color: #6c757d;
+}
+.message-time {
+  position: absolute;
+  right: 14px;
+  top: 16px;
+  color: #6c757d;
+}
+</style>
