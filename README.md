@@ -1,4 +1,4 @@
-# 簡易推特 API
+# 簡易推特
 
 [![Framework](https://img.shields.io/badge/Framework-Vue-aliceblue.svg)](https://www.npmjs.com/package/vue)
 [![Framework](https://img.shields.io/badge/Framework-Bootstrap-steelblue.svg)](https://getbootstrap.com/docs/4.4/getting-started/introduction/)
