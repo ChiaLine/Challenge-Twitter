@@ -4,7 +4,7 @@
 
     <!-- 左區卡片 -->
     <div class="chatroom-users">
-      <ChatroomUserCards />
+      <ChatroomUserCards :users="users"/>
     </div>
 
     <!-- 右區聊天室 -->
@@ -91,6 +91,7 @@ export default {
       showModal: false,
       messages: [],
       inputMessage: "",
+      users: [],
     };
   },
   mixins: [emptyImageFilter, formatDateFilter],
@@ -112,7 +113,8 @@ export default {
   created() {
     // 這是接收目前在聊天室的使用者清單
     socket.on("users", (users) => {
-      console.log(users);
+      console.log('users清單',users);
+      this.users = users
     });
     // 接收訊息其他使用者、自己的文字訊息
     socket.on("public message", (msg) => {

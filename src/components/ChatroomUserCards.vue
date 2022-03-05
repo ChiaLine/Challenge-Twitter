@@ -2,30 +2,13 @@
  <div class="chatroom-container">
     <p class="chatroom-title">上線使用者 (5)</p>
     <div class="chatroom-cards">
-      <div class="chatroom-card d-flex justify-content-start align-items-center">
-        <img class="chatroom-card-img" :src=" null | emptyImage"/>
-        <p class="chatroom-card-name">name</p>
-        <p class="chatroom-card-account">＠account</p>
-      </div>
-      <div class="chatroom-card d-flex justify-content-start align-items-center">
-        <img class="chatroom-card-img" :src=" null | emptyImage"/>
-        <p class="chatroom-card-name">name</p>
-        <p class="chatroom-card-account">＠account</p>
-      </div>
-      <div class="chatroom-card d-flex justify-content-start align-items-center">
-        <img class="chatroom-card-img" :src=" null | emptyImage"/>
-        <p class="chatroom-card-name">name</p>
-        <p class="chatroom-card-account">＠account</p>
-      </div>
-      <div class="chatroom-card d-flex justify-content-start align-items-center">
-        <img class="chatroom-card-img" :src=" null | emptyImage"/>
-        <p class="chatroom-card-name">name</p>
-        <p class="chatroom-card-account">＠account</p>
-      </div>
-      <div class="chatroom-card d-flex justify-content-start align-items-center">
-        <img class="chatroom-card-img" :src=" null | emptyImage"/>
-        <p class="chatroom-card-name">name</p>
-        <p class="chatroom-card-account">＠account</p>
+      <div class="chatroom-card d-flex justify-content-start align-items-center"
+      v-for="user in users"
+      :key="user.UserId"
+      >
+        <img class="chatroom-card-img" :src=" user.avatar | emptyImage"/>
+        <p class="chatroom-card-name">{{user.name}}</p>
+        <p class="chatroom-card-account">＠{{user.account}}</p>
       </div>
     </div>
   </div>
@@ -37,6 +20,12 @@ import { emptyImageFilter } from "../utils/mixins";
 export default {
   name: 'ChatroomCards',
   mixins: [emptyImageFilter],
+  props: {
+    users: {
+      type: Array,
+      required: true,
+    }
+  },
 }
 </script>
 
