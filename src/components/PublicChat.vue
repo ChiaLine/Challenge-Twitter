@@ -14,7 +14,7 @@
       >
         <!-- v-if判斷相應內容 -->
         <!-- 1:上線離線通知 -->
-        <span v-if="message.typeId === 1">{{message.content}}</span>
+        <span v-if="message.typeId === 1">{{ message.content }}</span>
         <!-- 2:其他使用者的訊息 -->
         <div v-if="message.typeId === 2" class="card-other-container">
           <div class="img-container">
@@ -37,13 +37,19 @@
       </div>
     </div>
     <div class="input-container">
-      <input type="text" placeholder="輸入訊息..." />
-      <button><img src="https://i.imgur.com/Jrjlukd.jpg" alt="" /></button>
+      <input v-model="inputMessage" type="text" placeholder="輸入訊息..." />
+      <button @click.stop.prevent="sendMessage">
+        <img src="https://i.imgur.com/Jrjlukd.jpg" alt="" />
+      </button>
     </div>
   </div>
 </template>
 
-<script>
+<script src="https://cdn.socket.io/4.4.1/socket.io.min.js"
+    integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H"
+    crossorigin="anonymous">
+// import { socketApiHelper } from './../utils/helpers';
+
 const dummyMessages = [
   {
     id: 1,
@@ -116,11 +122,60 @@ const dummyMessages = [
     avatar: "",
   },
 ];
+
+const URL1 = "https://twitter-api-chatroom.herokuapp.com/";
+// const URL2 = "http://127.0.0.1:3000";
+const TOKEN =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJ1c2VyNUBleGFtcGxlLmNvbSIsImFjY291bnQiOiJ1c2VyNSIsIm5hbWUiOiJ1c2VyNSIsImF2YXRhciI6Imh0dHBzOi8vcmFuZG9tdXNlci5tZS9hcGkvcG9ydHJhaXRzL3dvbWVuLzY2LmpwZyIsImNvdmVyIjpudWxsLCJpbnRyb2R1Y3Rpb24iOiJBdXQgdmVybyBlb3MgaWxsbyBlaXVzIGVpdXMuXG5FdCBlaXVzIGlkIG5hdHVzIHF1aWEgcXVhcyBhbGlxdWlkIGVzdC4iLCJyb2xlIjoidXNlciIsInRvdGFsVHdlZXRzIjoxMCwidG90YWxGb2xsb3dpbmdzIjowLCJ0b3RhbEZvbGxvd2VycyI6MCwidG90YWxMaWtlZCI6MCwiY3JlYXRlZEF0IjoiMjAyMi0wMy0wMlQwMzowNDo1My4wMDBaIiwidXBkYXRlZEF0IjoiMjAyMi0wMy0wMlQwMzowNDo1My4wMDBaIiwiaWF0IjoxNjQ2MjI1NTM5LCJleHAiOjE2NDg4MTc1Mzl9.CtUVHLZjIsofw9Anq50dxw_s860MmqnXh7bHJAFeS6w";
+
+const socket = io(URL1, {
+  auth: { token: TOKEN },
+});
+
+// 這是接收目前在聊天室的使用者清單
+socket.on("users", (users) => {
+  console.log(users);
+  // users.forEach(user => {
+  //   const item = document.createElement('li')
+  //   item.textContent = user.name
+  //   usersPanel.appendChild(item)
+  // })
+});
+
+socket.on("public message", (msg) => {
+  console.log(msg);
+  // const item = document.createElement("li");
+  // item.textContent = msg;
+  // messages.appendChild(item);
+  // window.scrollTo(0, document.body.scrollHeight);
+});
+
 export default {
   data() {
     return {
       messages: dummyMessages,
+      inputMessage: "",
     };
+  },
+  methods: {
+    // 這是送出聊天內容的按鈕
+    sendMessage() {
+      if (this.inputMessage) {
+        socket.emit("public message", this.inputMessage);
+        this.inputMessage = "";
+      }
+    },
+    // 這是接收目前在聊天室的使用者清單
+    // getUsers() {
+    //   socket.on("users", (users) => {
+    //     console.log(users);
+    //     // users.forEach(user => {
+    //     //   const item = document.createElement('li')
+    //     //   item.textContent = user.name
+    //     //   usersPanel.appendChild(item)
+    //     // })
+    //   });
+    // },
   },
 };
 </script>
