@@ -48,7 +48,7 @@
           </div>
         </div>
         <div class="input-container">
-          <input v-model="inputMessage" type="text" placeholder="輸入訊息..." />
+          <input @keyup.enter="sendMessage" v-model="inputMessage" type="text" placeholder="輸入訊息..." />
           <button @click="sendMessage">
             <img src="https://i.imgur.com/Jrjlukd.jpg" alt="" />
           </button>
@@ -68,7 +68,14 @@ import { mapState } from "vuex";
 import { formatDateFilter } from "./../utils/mixins";
 import { emptyImageFilter } from "../utils/mixins";
 
+// 正式後端伺服器
 const URL1 = "https://twitter-api-chatroom.herokuapp.com/";
+
+// 0305晚上靜易的測試伺服器，有些功能正式版還沒有，但不一定會開
+// const URL1 = "https://dd0f-150-117-29-118.ngrok.io";
+
+// 注意！helpers.js的baseURL也需要切換到同一個伺服器
+// 目前正常顯示上下線通知、歷史聊天紀錄等功能，尚未發布到正式伺服器，因此更新前會收不到
 
 // 取當前使用者token
 const TOKEN = localStorage.getItem("token");
@@ -104,24 +111,34 @@ export default {
     },
     sendMessage() {
       if (this.inputMessage) {
-        console.log("送出訊息");
         socket.emit("public message", this.inputMessage);
         this.inputMessage = "";
       }
     },
+    // 頁面切換到公開聊天室時呼叫(created)
+    connectUser() {
+      socket.connect();
+      socket.emit("render chatroom", "我進來聊天室了");
+    },
+    // 頁面離開公開聊天室時呼叫(beforeDestroy)
+    disconnectUser() {
+      socket.disconnect(true);
+    },
   },
   created() {
+    // 告知伺服器使用者上線
+    this.connectUser();
+    // 獲取歷史聊天紀錄（後端只有在被告知使用者上線時，才會送出）
+    socket.on("render chatroom", (data) => {
+      console.log("msg清單: ", data);
+    });
     // 這是接收目前在聊天室的使用者清單
     socket.on("users", (users) => {
-      console.log('users清單',users);
       this.users = users
     });
     // 接收訊息其他使用者、自己的文字訊息
     socket.on("public message", (msg) => {
-      console.log(msg);
-      console.log(typeof msg);
       if (msg.senderId === this.currentUser.id) {
-        console.log("self msg");
         const thisMessage = {
           id: -1,
           content: msg.message,
@@ -132,7 +149,6 @@ export default {
         };
         this.messages.unshift(thisMessage);
       } else {
-        console.log("other msg");
         const thisMessage = {
           id: -1,
           content: msg.message,
@@ -144,7 +160,7 @@ export default {
         this.messages.unshift(thisMessage);
       }
     });
-    // 接收使用者上線通知
+    // 接收並顯示使用者上線通知
     socket.on("user connect", (msg) => {
       const thisMessage = {
         id: -1,
@@ -156,7 +172,7 @@ export default {
       };
       this.messages.unshift(thisMessage);
     });
-    // 接收使用者離線通知
+    // 接收並顯示使用者離線通知
     socket.on("user disconnect", (msg) => {
       const thisMessage = {
         id: -1,
@@ -168,6 +184,10 @@ export default {
       };
       this.messages.unshift(thisMessage);
     });
+  },
+  beforeDestroy() {
+    // 離開頁面時告知後端伺服器
+     this.disconnectUser();
   },
   computed: {
     ...mapState(["currentUser"]),

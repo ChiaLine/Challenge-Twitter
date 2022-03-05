@@ -2,15 +2,14 @@
 import axios from 'axios'
 import Swal from 'sweetalert2'
 
+// 正式後端伺服器
 const baseURL = 'https://twitter-api-chatroom.herokuapp.com/api'
-const socketURL = 'https://twitter-api-chatroom.herokuapp.com/'
+
+// 0305晚上靜易的測試伺服器
+// const baseURL = 'https://dd0f-150-117-29-118.ngrok.io/api'
 
 export const apiHelper = axios.create({
   baseURL,
-})
-
-export const socketApiHelper = axios.create({
-  socketURL,
 })
 
 export const Toast = Swal.mixin({
