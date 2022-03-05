@@ -31,7 +31,6 @@ export default {
   },
   methods: {
     handleTweetButtonCard() {
-      console.log("show modal");
       this.$emit("after-show-tweet-modal");
     },
   },

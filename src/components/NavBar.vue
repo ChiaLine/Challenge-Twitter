@@ -101,16 +101,12 @@ export default {
   created() {
     this.fetchNavItems();
     this.new = this.$route.name
-    console.log('created',this.$route.params)
-    console.log(this.$route.name)
   },
-  watch: {
-    new(newValue) {
-      console.log('watch',this.$route.params)
-      console.log(newValue)
-      console.log(this.$route.name)
-    }
-  },
+  // watch: {
+  //   new(newValue) {
+
+  //   }
+  // },
   methods: {
     fetchNavItems() {
       const { navItems } = dummyData

@@ -133,7 +133,6 @@ export default {
           throw new Error(data.message);
         }
         // 發送成功提示
-        console.log(this.tweetContent);
         Toast.fire({
           icon: "success",
           title: "成功發送回覆！",

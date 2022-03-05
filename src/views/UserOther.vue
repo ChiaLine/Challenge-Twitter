@@ -42,11 +42,9 @@ export default {
     };
   },
   async beforeRouteUpdate() {
-    console.log("????", this.$route.params.id);
     await this.fetchData(this.$route.params.id);
   },
   created() {
-    console.log(this.$route.params.id);
     this.fetchData(this.$route.params.id);
   },
   methods: {
@@ -54,8 +52,6 @@ export default {
       try {
         let { data } = await getUserDataAPI.getUserProfile(userId);
         this.user = data;
-        console.log("data", data);
-        console.log("this.user", this.user);
         this.userIsLoading = false;
       } catch (error) {
         this.userIsLoading = false;

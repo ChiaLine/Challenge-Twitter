@@ -68,7 +68,6 @@ export default {
   },
   created() {
     const { type: currentType } = this.$route.query;
-    console.log(currentType);
     this.checkInitialType(currentType);
     const { id: userId } = this.$route.params;
     this.fetchUser(userId);
@@ -84,7 +83,6 @@ export default {
         const { data } = response;
         this.user = { ...data };
       } catch (e) {
-        console.log(e.response.data.message);
         Toast.fire({
           icon: "warning",
           title: "無法取得使用者資料",

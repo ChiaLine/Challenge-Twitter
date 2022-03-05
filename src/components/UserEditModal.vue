@@ -164,9 +164,6 @@ export default {
         this.isProcessing = true;
         const form = e.target;
         const formData = new FormData(form);
-        for (let [name, value] of formData.entries()) {
-          console.log(name + ": " + value);
-        }
         // 串接API送出表單資料
         const userId = this.user.id;
         const response = await userEditModalAPI.updateUserData({

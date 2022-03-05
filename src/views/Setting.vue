@@ -34,23 +34,20 @@ export default {
   },
   methods: {
     afterShowTweetModal() {
-      console.log("afterShowModal--Setting");
       this.showModal = true;
     },
     afterHideModal() {
-      console.log("afterHideModal--Setting");
       this.showModal = false;
     },
     async handleAfterSubmit([account, name, email, password, checkPassword]) {
       try {
-        const response = await getUserDataAPI.update(this.currentUser.id, {
+        await getUserDataAPI.update(this.currentUser.id, {
           account,
           name,
           email,
           password,
           checkPassword,
         });
-        console.log(response);
         this.$router.go(0);
       } catch (e) {
         Toast.fire({

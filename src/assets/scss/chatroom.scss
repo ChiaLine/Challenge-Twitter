@@ -1,0 +1,144 @@
+@import "_color.scss";
+
+.chatroom-container {
+  width: 100%;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: hidden;
+}
+
+// 訊息顯示區
+.display-container {
+  flex-grow: 1;
+  overflow-y: scroll;
+  padding: 16px;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+
+  // 離線、上線通知
+  .notification {
+    margin-bottom: 20px;
+    padding: 7px 14px;
+    background: #E5E5E5;
+    border-radius: 50px;
+    // text
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 15px;
+    text-align: center;
+    color: #657786;
+  }
+
+  // 其他使用者的訊息
+  .card-other {
+    margin-bottom: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: start;
+
+    .card-other-container {
+      max-width: 365px;
+      display: flex;
+
+      // 大頭貼區域
+      .img-container {
+        margin-right: 10px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+
+        img {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+      }
+
+      // 訊息內容與時間
+      .content-container {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+
+        .text {
+          background: #E6ECF0;
+          border-radius: 25px 25px 25px 0px;
+          padding: 10px 15px;
+          font-size: 15px;
+          line-height: 20px;
+          color: #1C1C1C;
+        }
+
+        .time {
+          margin-top: 2px;
+          font-size: 13px;
+          line-height: 13px;
+          color: #657786;
+        }
+      }
+    }
+  }
+
+  // 自己的訊息
+  .card-self {
+    margin-bottom: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: end;
+
+    .card-self-container {
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: end;
+
+      .text {
+        flex-grow: 1;
+        background: #FF6600;
+        border-radius: 25px 25px 0px 25px;
+        padding: 10px 15px;
+        font-size: 15px;
+        line-height: 20px;
+        color: #FFFFFF;
+      }
+
+      .time {
+        margin-top: 2px;
+        font-size: 13px;
+        line-height: 13px;
+        color: #657786;
+      }  
+    }
+  }
+}
+
+// 訊息輸入區
+.input-container {
+  height: 64px;
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #E6ECF0;
+
+  input {
+    flex-grow: 1;
+    height: 32px;
+    background: #E6ECF0;
+    border: 1px solid #E6ECF0;
+    border-radius: 50px;
+    // 輸入內容
+    padding: 0 16px;
+    font-size: 16px;
+    line-height: 26px;
+    color: #92929D;
+  }
+
+  img {
+    width: 20px;
+    height: 20px;
+  }
+}

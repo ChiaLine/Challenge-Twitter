@@ -13,15 +13,6 @@
         <p class="message-content-name">name</p>
         <span class="message-content-account">@account</span>
       </div>
-      <div class="message-container">
-        未處理 私人聊天內容區 ???????
-      </div>
-      <div class="message-panel">
-        <input class="message-input" placeholder="輸入訊息..." type="text" />
-        <button class="message-btn">
-          <img class="message-img" src="https://i.imgur.com/1WQnkAO.png" />
-        </button>
-      </div>
     </div>
 
     <TweetModal v-if="showModal" @after-hide-modal="afterHideModal" />
@@ -48,11 +39,9 @@ export default {
   },
   methods: {
     afterShowTweetModal() {
-      console.log("afterShowModal--Setting");
       this.showModal = true;
     },
     afterHideModal() {
-      console.log("afterHideModal--Setting");
       this.showModal = false;
     },
   },
@@ -73,9 +62,10 @@ export default {
 /* 右區聊天室 */
 .message-content {
   min-width: 600px;
-  border-right: 1px solid #e6ecf0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
-
 .message-content-title {
   height: 74px;
   border-bottom: 1px solid #e6ecf0;
