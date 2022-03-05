@@ -1,13 +1,18 @@
 <template>
   <div class="h-100 d-flex justify-content-center">
     <NavBar @after-show-tweet-modal="afterShowTweetModal" />
+
+    <!-- 左區卡片 -->
     <div class="chatroom-users">
-     <ChatroomUserCards />
+      <ChatroomUserCards />
     </div>
+
+    <!-- 右區聊天室 -->
     <div class="chatroom-content">
       <h5 class="chatroom-content-title p-3">公開聊天室</h5>
       <PublicChat />
     </div>
+
     <TweetModal v-if="showModal" @after-hide-modal="afterHideModal" />
   </div>
 </template>
@@ -47,6 +52,7 @@ export default {
 </script>
 
 <style scoped>
+/* 左區卡片 */
 .chatroom-users {
   min-width: 390px;
   border-left: 1px solid #e6ecf0;
