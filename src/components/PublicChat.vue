@@ -38,16 +38,14 @@
     </div>
     <div class="input-container">
       <input v-model="inputMessage" type="text" placeholder="輸入訊息..." />
-      <button @click.stop.prevent="sendMessage">
+      <button @click="sendMessage">
         <img src="https://i.imgur.com/Jrjlukd.jpg" alt="" />
       </button>
     </div>
   </div>
 </template>
 
-<script src="https://cdn.socket.io/4.4.1/socket.io.min.js"
-    integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H"
-    crossorigin="anonymous">
+<script>
 // import { socketApiHelper } from './../utils/helpers';
 
 const dummyMessages = [
@@ -126,7 +124,9 @@ const dummyMessages = [
 const URL1 = "https://twitter-api-chatroom.herokuapp.com/";
 // const URL2 = "http://127.0.0.1:3000";
 const TOKEN =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJ1c2VyNUBleGFtcGxlLmNvbSIsImFjY291bnQiOiJ1c2VyNSIsIm5hbWUiOiJ1c2VyNSIsImF2YXRhciI6Imh0dHBzOi8vcmFuZG9tdXNlci5tZS9hcGkvcG9ydHJhaXRzL3dvbWVuLzY2LmpwZyIsImNvdmVyIjpudWxsLCJpbnRyb2R1Y3Rpb24iOiJBdXQgdmVybyBlb3MgaWxsbyBlaXVzIGVpdXMuXG5FdCBlaXVzIGlkIG5hdHVzIHF1aWEgcXVhcyBhbGlxdWlkIGVzdC4iLCJyb2xlIjoidXNlciIsInRvdGFsVHdlZXRzIjoxMCwidG90YWxGb2xsb3dpbmdzIjowLCJ0b3RhbEZvbGxvd2VycyI6MCwidG90YWxMaWtlZCI6MCwiY3JlYXRlZEF0IjoiMjAyMi0wMy0wMlQwMzowNDo1My4wMDBaIiwidXBkYXRlZEF0IjoiMjAyMi0wMy0wMlQwMzowNDo1My4wMDBaIiwiaWF0IjoxNjQ2MjI1NTM5LCJleHAiOjE2NDg4MTc1Mzl9.CtUVHLZjIsofw9Anq50dxw_s860MmqnXh7bHJAFeS6w";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTA0LCJlbWFpbCI6InVzZXIxMEBleGFtcGxlLmNvbSIsImFjY291bnQiOiJ1c2VyMTAiLCJuYW1lIjoidXNlcjEwIiwiYXZhdGFyIjoiaHR0cHM6Ly9yYW5kb211c2VyLm1lL2FwaS9wb3J0cmFpdHMvbWVuLzM4LmpwZyIsImNvdmVyIjpudWxsLCJpbnRyb2R1Y3Rpb24iOiJCZWF0YWUgb2NjYWVjYXRpIGVsaWdlbmRpIGRlbGVjdHVzIGF1dGVtLiIsInJvbGUiOiJ1c2VyIiwidG90YWxUd2VldHMiOjEwLCJ0b3RhbEZvbGxvd2luZ3MiOjMsInRvdGFsRm9sbG93ZXJzIjo1LCJ0b3RhbExpa2VkIjozLCJjcmVhdGVkQXQiOiIyMDIyLTAzLTAzVDEyOjUwOjM3LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDIyLTAzLTA0VDEyOjM3OjQ2LjAwMFoiLCJpYXQiOjE2NDY0NjM2NDYsImV4cCI6MTY0OTA1NTY0Nn0.ws0oTXDOkMLJJdT12cCSwOOHFdsrS9hX21LUfjKsIyU";
+
+const { io } = require("socket.io-client");
 
 const socket = io(URL1, {
   auth: { token: TOKEN },
@@ -142,6 +142,7 @@ socket.on("users", (users) => {
   // })
 });
 
+// 接收訊息
 socket.on("public message", (msg) => {
   console.log(msg);
   // const item = document.createElement("li");
@@ -161,6 +162,7 @@ export default {
     // 這是送出聊天內容的按鈕
     sendMessage() {
       if (this.inputMessage) {
+        console.log('送出訊息')
         socket.emit("public message", this.inputMessage);
         this.inputMessage = "";
       }
