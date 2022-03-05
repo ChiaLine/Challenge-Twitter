@@ -49,6 +49,30 @@ const dummyData = {
     },
     {
       id: 2,
+      title: "通知",
+      icon: 'https://i.imgur.com/eMW7Etw.png',
+      iconActive: 'https://i.imgur.com/w5tCGXo.png',
+      to: 'Notify',
+      active: false,
+    },
+    {
+      id: 3,
+      title: "公開聊天室",
+      icon: 'https://i.imgur.com/jw9laKy.png',
+      iconActive: 'https://i.imgur.com/f6TrOho.png',
+      to: 'Chatroom',
+      active: false,
+    },
+    {
+      id: 4,
+      title: "私人訊息",
+      icon: 'https://i.imgur.com/Cx07Sff.png',
+      iconActive: 'https://i.imgur.com/f6TrOho.png',
+      to: 'Message',
+      active: false,
+    },
+    {
+      id: 5,
       title: "個人資料",
       icon: 'https://i.imgur.com/feES0o7.png',
       iconActive: 'https://i.imgur.com/rGhaeOT.png',
@@ -56,7 +80,7 @@ const dummyData = {
       active: false,
     },
     {
-      id: 3,
+      id: 6,
       title: "設定",
       icon: 'https://i.imgur.com/rottgfT.png',
       iconActive: 'https://i.imgur.com/WMyBdJ2.png',
@@ -77,16 +101,12 @@ export default {
   created() {
     this.fetchNavItems();
     this.new = this.$route.name
-    console.log('created',this.$route.params)
-    console.log(this.$route.name)
   },
-  watch: {
-    new(newValue) {
-      console.log('watch',this.$route.params)
-      console.log(newValue)
-      console.log(this.$route.name)
-    }
-  },
+  // watch: {
+  //   new(newValue) {
+
+  //   }
+  // },
   methods: {
     fetchNavItems() {
       const { navItems } = dummyData
@@ -130,4 +150,7 @@ export default {
 
 <style lang="scss">
 @import "../assets/scss/navbar.scss";
+.navbar-icon {
+  border-radius: 5px;
+}
 </style>

@@ -34,7 +34,6 @@ const authorizeIsUser = async (to, from, next) => {
   // localStorage 有 token 才驗證 & 比較 store 中的 token 是否一樣
   if (tokenInLocalStorage && tokenInLocalStorage !== tokenInStore) {
     // 使用 dispatch 呼叫 Vuex 內的 actions
-    console.log('OK')
     isAuthenticated = await store.dispatch('fetchCurrentUser')
   }
   
@@ -81,6 +80,18 @@ const router = new VueRouter({
       component: () => import('../views/Setting.vue')
     },
     {
+      path: '/Chatroom',
+      name: 'Chatroom',
+      beforeEnter: authorizeIsUser,
+      component: () => import('../views/Chatroom.vue')
+    },
+    {
+      path: '/Message',
+      name: 'Message',
+      beforeEnter: authorizeIsUser,
+      component: () => import('../views/Message.vue')
+    },
+    {
       path: '/User',
       name: 'User',
       redirect: '/User/Main',
@@ -91,6 +102,11 @@ const router = new VueRouter({
           path: 'Main',
           name: 'Main',
           component: () => import('../views/Main.vue'),
+        },
+        {
+          path: 'Notify',
+          name: 'Notify',
+          component: () => import('../views/Notify.vue'),
         },
         {
           path: 'ReplyList/:id',

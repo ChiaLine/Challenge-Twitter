@@ -40,7 +40,6 @@ export default {
   methods: {
     async handleAdminSubmit(account, password) {
       try {
-        console.log('handleAdminSubmit', {account, password})
         if (!account || !password) {
           Toast.fire({
             icon: "warning",
@@ -52,7 +51,6 @@ export default {
         // this.isProcessing = true;
 
         let response = await authorizationAPI.adminLogin( {account, password} );
-        console.log('handleAdminSubmit', response)
         const { data } = response;
 
         if (data.status === "error") {

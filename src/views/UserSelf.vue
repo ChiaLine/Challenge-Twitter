@@ -1,6 +1,9 @@
 <template>
   <div class="user-self h-100">
-    <UserProfileCard :initialUser="currentUser" @after-show-user-edit-modal="afterShowUserEditModal"/>
+    <UserProfileCard
+      :initialUser="currentUser"
+      @after-show-user-edit-modal="afterShowUserEditModal"
+    />
     <UserTweetListCard
       @after-show-reply-modal="afterShowReplyModal"
       :initialUser="currentUser"
@@ -45,8 +48,7 @@ export default {
   },
   methods: {
     afterShowReplyModal(replyTweetId) {
-      console.log("Reply--user", replyTweetId);
-      this.$emit("after-show-reply-modal",replyTweetId)
+      this.$emit("after-show-reply-modal", replyTweetId);
     },
     afterShowUserEditModal() {
       this.$emit("after-show-user-edit-modal");

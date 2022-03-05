@@ -22,11 +22,9 @@ export default {
   },
   methods: {
     afterShowModal() {
-      console.log("afterShowModal----main");
       this.$emit("after-show-tweet-modal");
     },
     afterShowReplyModal(replyTweetId) {
-      console.log("afterShowReplyModal----main", replyTweetId);
       this.$emit("after-show-reply-modal",replyTweetId);
     },
   },
