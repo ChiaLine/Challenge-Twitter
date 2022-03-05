@@ -29,7 +29,7 @@
             <!-- 2:其他使用者的訊息 -->
             <div v-if="message.typeId === 2" class="card-other-container">
               <div class="img-container">
-                <img :src="message.avatar" alt="avatar" />
+                <img :src="message.avatar | emptyImage" alt="avatar" />
               </div>
               <div class="content-container">
                 <div class="text">
@@ -55,7 +55,7 @@
         </div>
       </div>
     </div>
-
+    
     <TweetModal v-if="showModal" @after-hide-modal="afterHideModal" />
   </div>
 </template>
@@ -66,84 +66,9 @@ import ChatroomUserCards from "../components/ChatroomUserCards.vue";
 import TweetModal from "../components/TweetModal.vue";
 import { mapState } from "vuex";
 import { formatDateFilter } from "./../utils/mixins";
-
-// import { socketApiHelper } from './../utils/helpers';
-
-// const dummyMessages = [
-//   {
-//     id: 1,
-//     content: "罐子離線",
-//     typeId: 1,
-//     type: "notification",
-//     createdAt: "上午3:59",
-//     avatar: "",
-//   },
-//   {
-//     id: 2,
-//     content:
-//       "Christine早安！下午見。字數多測試字數多測試字數多測試字數多測試字數多測試字數多測試字數多測試字數多測試字數多測試字數多測試",
-//     typeId: 2,
-//     type: "other",
-//     createdAt: "上午3:25",
-//     avatar: "https://images.dog.ceo/breeds/mastiff-tibetan/n02108551_143.jpg",
-//   },
-//   {
-//     id: 3,
-//     content:
-//       "嗨嗨嗨嗨嗨。字數多測試字數多測試字數多測試字數多測試字數多測試字數多測試字數多測試字數多測試字數多測試字數多測試",
-//     typeId: 3,
-//     type: "self",
-//     createdAt: "上午3:08",
-//     avatar: "",
-//   },
-//   {
-//     id: 4,
-//     content:
-//       "嗨嗨嗨嗨嗨。字數多測試字數多測試字數多測試字數多測試字數多測試字數多測試字數多測試字數多測試字數多測試字數多測試",
-//     typeId: 3,
-//     type: "self",
-//     createdAt: "上午3:08",
-//     avatar: "",
-//   },
-//   {
-//     id: 5,
-//     content:
-//       "嗨嗨嗨嗨嗨。字數多測試字數多測試字數多測試字數多測試字數多測試字數多測試字數多測試字數多測試字數多測試字數多測試",
-//     typeId: 3,
-//     type: "self",
-//     createdAt: "上午3:08",
-//     avatar: "",
-//   },
-//   {
-//     id: 6,
-//     content:
-//       "嗨嗨嗨嗨嗨。字數多測試字數多測試字數多測試字數多測試字數多測試字數多測試字數多測試字數多測試字數多測試字數多測試",
-//     typeId: 3,
-//     type: "self",
-//     createdAt: "上午3:08",
-//     avatar: "",
-//   },
-//   {
-//     id: 7,
-//     content:
-//       "Christine早安！下午見。字數多測試字數多測試字數多測試字數多測試字數多測試字數多測試字數多測試字數多測試字數多測試字數多測試",
-//     typeId: 2,
-//     type: "other",
-//     createdAt: "上午3:25",
-//     avatar: "https://images.dog.ceo/breeds/mastiff-tibetan/n02108551_143.jpg",
-//   },
-//   {
-//     id: 8,
-//     content: "罐子上線",
-//     typeId: 1,
-//     type: "notification",
-//     createdAt: "上午3:59",
-//     avatar: "",
-//   },
-// ];
+import { emptyImageFilter } from "../utils/mixins";
 
 const URL1 = "https://twitter-api-chatroom.herokuapp.com/";
-// const URL2 = "http://127.0.0.1:3000";
 
 // 取當前使用者token
 const TOKEN = localStorage.getItem("token");
@@ -153,26 +78,6 @@ const { io } = require("socket.io-client");
 const socket = io(URL1, {
   auth: { token: TOKEN },
 });
-
-// 這是接收目前在聊天室的使用者清單
-// socket.on("users", (users) => {
-//   console.log(users);
-// users.forEach(user => {
-//   const item = document.createElement('li')
-//   item.textContent = user.name
-//   usersPanel.appendChild(item)
-// })
-// });
-
-// 接收訊息
-// socket.on("public message", (msg) => {
-//   console.log(msg);
-
-//   const item = document.createElement("li");
-//   item.textContent = msg;
-//   messages.appendChild(item);
-//   window.scrollTo(0, document.body.scrollHeight);
-// });
 
 export default {
   name: "Chatroom",
@@ -188,7 +93,7 @@ export default {
       inputMessage: "",
     };
   },
-  mixins: [formatDateFilter],
+  mixins: [emptyImageFilter, formatDateFilter],
   methods: {
     afterShowTweetModal() {
       this.showModal = true;
@@ -214,7 +119,7 @@ export default {
       //   usersPanel.appendChild(item)
       // })
     });
-    // 接收訊息
+    // 接收訊息其他使用者、自己的文字訊息
     socket.on("public message", (msg) => {
       console.log(msg);
       console.log(typeof msg);
@@ -237,46 +142,31 @@ export default {
           typeId: 2,
           type: "other",
           time: msg.createdAt,
-          avatar:
-            "https://images.dog.ceo/breeds/mastiff-tibetan/n02108551_143.jpg",
+          avatar: msg.avatar,
         };
         this.messages.unshift(thisMessage);
       }
-      // if (typeof msg === "string") {
-      //   const thisMessage = {
-      //     id: -1,
-      //     content: msg,
-      //     typeId: 1,
-      //     type: "notification",
-      //     createdAt: "",
-      //     avatar: "",
-      //   };
-      //   this.messages.push(thisMessage)
-      // }
-
-      // const item = document.createElement("li");
-      // item.textContent = msg;
-      // messages.appendChild(item);
-      // window.scrollTo(0, document.body.scrollHeight);
     });
+    // 接收使用者上線通知
     socket.on("user connect", (msg) => {
       const thisMessage = {
         id: -1,
         content: msg,
         typeId: 1,
         type: "notification",
-        createdAt: "",
+        time: "",
         avatar: "",
       };
       this.messages.unshift(thisMessage);
     });
+    // 接收使用者離線通知
     socket.on("user disconnect", (msg) => {
       const thisMessage = {
         id: -1,
         content: msg,
         typeId: 1,
         type: "notification",
-        createdAt: "",
+        time: "",
         avatar: "",
       };
       this.messages.unshift(thisMessage);
