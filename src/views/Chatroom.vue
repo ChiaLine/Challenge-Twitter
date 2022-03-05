@@ -113,11 +113,6 @@ export default {
     // 這是接收目前在聊天室的使用者清單
     socket.on("users", (users) => {
       console.log(users);
-      // users.forEach(user => {
-      //   const item = document.createElement('li')
-      //   item.textContent = user.name
-      //   usersPanel.appendChild(item)
-      // })
     });
     // 接收訊息其他使用者、自己的文字訊息
     socket.on("public message", (msg) => {
@@ -142,7 +137,7 @@ export default {
           typeId: 2,
           type: "other",
           time: msg.createdAt,
-          avatar: msg.avatar,
+          avatar: msg.senderAvatar,
         };
         this.messages.unshift(thisMessage);
       }
