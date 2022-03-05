@@ -64,7 +64,7 @@
 import NavBar from "../components/NavBar.vue";
 import ChatroomUserCards from "../components/ChatroomUserCards.vue";
 import TweetModal from "../components/TweetModal.vue";
-// import { mapState } from "vuex";
+import { mapState } from "vuex";
 
 // import { socketApiHelper } from './../utils/helpers';
 
@@ -143,8 +143,10 @@ const dummyMessages = [
 
 const URL1 = "https://twitter-api-chatroom.herokuapp.com/";
 // const URL2 = "http://127.0.0.1:3000";
-const TOKEN =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTA0LCJlbWFpbCI6InVzZXIxMEBleGFtcGxlLmNvbSIsImFjY291bnQiOiJ1c2VyMTAiLCJuYW1lIjoidXNlcjEwIiwiYXZhdGFyIjoiaHR0cHM6Ly9yYW5kb211c2VyLm1lL2FwaS9wb3J0cmFpdHMvbWVuLzM4LmpwZyIsImNvdmVyIjpudWxsLCJpbnRyb2R1Y3Rpb24iOiJCZWF0YWUgb2NjYWVjYXRpIGVsaWdlbmRpIGRlbGVjdHVzIGF1dGVtLiIsInJvbGUiOiJ1c2VyIiwidG90YWxUd2VldHMiOjEwLCJ0b3RhbEZvbGxvd2luZ3MiOjMsInRvdGFsRm9sbG93ZXJzIjo1LCJ0b3RhbExpa2VkIjozLCJjcmVhdGVkQXQiOiIyMDIyLTAzLTAzVDEyOjUwOjM3LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDIyLTAzLTA0VDEyOjM3OjQ2LjAwMFoiLCJpYXQiOjE2NDY0NjM2NDYsImV4cCI6MTY0OTA1NTY0Nn0.ws0oTXDOkMLJJdT12cCSwOOHFdsrS9hX21LUfjKsIyU";
+// const TOKEN =
+//   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTA0LCJlbWFpbCI6InVzZXIxMEBleGFtcGxlLmNvbSIsImFjY291bnQiOiJ1c2VyMTAiLCJuYW1lIjoidXNlcjEwIiwiYXZhdGFyIjoiaHR0cHM6Ly9yYW5kb211c2VyLm1lL2FwaS9wb3J0cmFpdHMvbWVuLzM4LmpwZyIsImNvdmVyIjpudWxsLCJpbnRyb2R1Y3Rpb24iOiJCZWF0YWUgb2NjYWVjYXRpIGVsaWdlbmRpIGRlbGVjdHVzIGF1dGVtLiIsInJvbGUiOiJ1c2VyIiwidG90YWxUd2VldHMiOjEwLCJ0b3RhbEZvbGxvd2luZ3MiOjMsInRvdGFsRm9sbG93ZXJzIjo1LCJ0b3RhbExpa2VkIjozLCJjcmVhdGVkQXQiOiIyMDIyLTAzLTAzVDEyOjUwOjM3LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDIyLTAzLTA0VDEyOjM3OjQ2LjAwMFoiLCJpYXQiOjE2NDY0NjM2NDYsImV4cCI6MTY0OTA1NTY0Nn0.ws0oTXDOkMLJJdT12cCSwOOHFdsrS9hX21LUfjKsIyU";
+
+const TOKEN = localStorage.getItem("token");
 
 const { io } = require("socket.io-client");
 
@@ -153,23 +155,24 @@ const socket = io(URL1, {
 });
 
 // 這是接收目前在聊天室的使用者清單
-socket.on("users", (users) => {
-  console.log(users);
-  // users.forEach(user => {
-  //   const item = document.createElement('li')
-  //   item.textContent = user.name
-  //   usersPanel.appendChild(item)
-  // })
-});
+// socket.on("users", (users) => {
+//   console.log(users);
+// users.forEach(user => {
+//   const item = document.createElement('li')
+//   item.textContent = user.name
+//   usersPanel.appendChild(item)
+// })
+// });
 
 // 接收訊息
-socket.on("public message", (msg) => {
-  console.log(msg);
-  // const item = document.createElement("li");
-  // item.textContent = msg;
-  // messages.appendChild(item);
-  // window.scrollTo(0, document.body.scrollHeight);
-});
+// socket.on("public message", (msg) => {
+//   console.log(msg);
+
+//   const item = document.createElement("li");
+//   item.textContent = msg;
+//   messages.appendChild(item);
+//   window.scrollTo(0, document.body.scrollHeight);
+// });
 
 export default {
   name: "Chatroom",
@@ -194,15 +197,35 @@ export default {
     },
     sendMessage() {
       if (this.inputMessage) {
-        console.log('送出訊息')
+        console.log("送出訊息");
         socket.emit("public message", this.inputMessage);
         this.inputMessage = "";
       }
     },
   },
-  // computed: {
-  //   ...mapState(["currentUser"]),
-  // },
+  created() {
+    // 這是接收目前在聊天室的使用者清單
+    socket.on("users", (users) => {
+      console.log(users);
+      // users.forEach(user => {
+      //   const item = document.createElement('li')
+      //   item.textContent = user.name
+      //   usersPanel.appendChild(item)
+      // })
+    });
+    // 接收訊息
+    socket.on("public message", (msg) => {
+      console.log(msg);
+
+      // const item = document.createElement("li");
+      // item.textContent = msg;
+      // messages.appendChild(item);
+      // window.scrollTo(0, document.body.scrollHeight);
+    });
+  },
+  computed: {
+    ...mapState(["currentUser"]),
+  },
 };
 </script>
 
