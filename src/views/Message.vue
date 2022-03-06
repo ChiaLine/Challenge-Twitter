@@ -49,6 +49,41 @@
               <p class="time">{{ message.time | formatDate }}</p>
             </div>
           </div>
+          <!-- 秀歷史訊息 -->
+          <template v-if="previousMessages.length > 0">
+            <div
+              v-for="message in previousMessages"
+              :key="message.index"
+              :class="{
+                notification: message.typeId === 1,
+                'card-other': message.typeId === 2,
+                'card-self': message.typeId === 3,
+              }"
+            >
+              <!-- v-if判斷相應內容 -->
+              <!-- 1:上線離線通知 -->
+              <span v-if="message.typeId === 1">{{ message.content }}</span>
+              <!-- 2:其他使用者的訊息 -->
+              <div v-if="message.typeId === 2" class="card-other-container">
+                <div class="img-container">
+                  <img :src="message.avatar | emptyImage" alt="avatar" />
+                </div>
+                <div class="content-container">
+                  <div class="text">
+                    {{ message.content }}
+                  </div>
+                  <p class="time">{{ message.time | formatDate }}</p>
+                </div>
+              </div>
+              <!-- 3:自己的訊息 -->
+              <div v-if="message.typeId === 3" class="card-self-container">
+                <div class="text">
+                  {{ message.content }}
+                </div>
+                <p class="time">{{ message.time | formatDate }}</p>
+              </div>
+            </div>
+          </template>
         </div>
         <div class="input-container">
           <input
@@ -139,14 +174,38 @@ export default {
     connect: function () {
       console.log("私人聊天室 web socket success");
     },
-    // 獲取歷史聊天紀錄（???）
-    [`render private messages`]: function (msg) {
-      console.log("獲取歷史訊息: ", msg);
-    },
     // 接收私信列表
     [`private message list`]: function (users) {
       console.log("接收私信列表: ", users);
       this.rooms = users;
+    },
+    // 獲取歷史聊天紀錄（???）
+    [`render private messages`]: function (data) {
+      console.log("獲取歷史訊息: ", data);
+      for (let i = 0; i < data.length; i++) {
+        const msg = data[i];
+        if (msg.senderId === this.currentUser.id) {
+          const thisMessage = {
+            id: -1,
+            content: msg.message,
+            typeId: 3,
+            type: "self",
+            time: msg.createdAt,
+            avatar: "",
+          };
+          this.previousMessages.unshift(thisMessage);
+        } else {
+          const thisMessage = {
+            id: -1,
+            content: msg.message,
+            typeId: 2,
+            type: "other",
+            time: msg.createdAt,
+            avatar: msg.senderAvatar,
+          };
+          this.previousMessages.unshift(thisMessage);
+        }
+      }
     },
     // 接收私人消息
     [`private message`]: function (msg) {
@@ -183,9 +242,9 @@ export default {
     // 離開頁面時告知後端伺服器
     this.disconnectUser();
     // 新增
-    // this.$socket.client.off("render private messages");
-    // this.$socket.client.off("private message list");
-    // this.$socket.client.off("private message");
+    this.$socket.client.off("render private messages");
+    this.$socket.client.off("private message list");
+    this.$socket.client.off("private message");
   },
 };
 </script>

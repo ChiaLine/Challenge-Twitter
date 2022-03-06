@@ -52,9 +52,8 @@ export default {
 @import "../assets/scss/_color.scss";
 .message {
   width: 390px;
-}
-.message-cards {
-  
+  height: 100%;
+  overflow-y: scroll;
 }
 .message-title {
   height: 74px;
@@ -70,7 +69,6 @@ export default {
   border-bottom: 1px solid $modal-outline;
   cursor: pointer;
 }
-
 .message-card-img {
   width: 50px;
   height: 50px;
