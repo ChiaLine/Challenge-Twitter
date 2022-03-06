@@ -53,6 +53,9 @@ export default {
 .message {
   width: 390px;
 }
+.message-cards {
+  
+}
 .message-title {
   height: 74px;
   line-height: 74px;

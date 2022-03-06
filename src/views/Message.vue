@@ -106,7 +106,12 @@ export default {
     },
     changeRoomId(newRoomId) {
       console.log("newRoomId", newRoomId);
-      this.currentRoomId = newRoomId;
+      if (this.currentRoomId !== newRoomId) {
+        this.currentRoomId = newRoomId;
+        // 切換私聊房間後，清空對話紀錄
+        this.previousMessages = [];
+        this.messages = [];
+      }
     },
     sendMessage() {
       if (this.inputMessage) {
@@ -146,6 +151,27 @@ export default {
     // 接收私人消息
     [`private message`]: function (msg) {
       console.log("接收私人訊息: ", msg);
+      if (msg.senderId === this.currentUser.id) {
+        const thisMessage = {
+          id: -1,
+          content: msg.message,
+          typeId: 3,
+          type: "self",
+          time: msg.createdAt,
+          avatar: "",
+        };
+        this.messages.unshift(thisMessage);
+      } else {
+        const thisMessage = {
+          id: -1,
+          content: msg.message,
+          typeId: 2,
+          type: "other",
+          time: msg.createdAt,
+          avatar: msg.senderAvatar,
+        };
+        this.messages.unshift(thisMessage);
+      }
     },
   },
   created() {
