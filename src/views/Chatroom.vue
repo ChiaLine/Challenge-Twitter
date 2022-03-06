@@ -247,7 +247,7 @@ export default {
     console.log("previousMessages", this.previousMessages.length);
     // 告知伺服器使用者上線
     this.connectUser();
-    alert("相關功能正在開發中，如使用中遇到錯誤，煩請重新整理畫面，謝謝");
+    alert("您確定要進入公開聊天室嗎？ 若是，請按下確定");
   },
   beforeDestroy() {
     // 離開頁面時告知後端伺服器
