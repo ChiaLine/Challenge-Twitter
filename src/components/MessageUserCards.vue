@@ -2,15 +2,24 @@
   <div class="message">
     <p class="message-title">訊息</p>
     <div class="message-cards">
-      <div v-for="room in rooms" :key="room.index" class="message-card d-flex justify-content-start align-items-center">
-        <img class="message-card-img" :src="room.receiver.avatar | emptyImage" />
+      <div
+        v-for="room in rooms"
+        :key="room.index"
+        @click.stop.prevent="getPrivateMessages(room.id)"
+        class="message-card d-flex justify-content-start align-items-center"
+      >
+        <img
+          class="message-card-img"
+          :src="room.receiver.avatar | emptyImage"
+        />
         <div class="message-content">
           <p class="message-name">
-            {{room.receiver.name}} <span class="message-account"> @{{room.receiver.account}} </span>
+            {{ room.receiver.name }}
+            <span class="message-account"> @{{ room.receiver.account }} </span>
           </p>
-          <p class="message-description">{{room.receiver.introduction}}</p>
+          <p class="message-description">{{ room.receiver.introduction }}</p>
         </div>
-        <div class="message-time">{{room.createdAt | fromNow }}</div>
+        <div class="message-time">{{ room.createdAt | fromNow }}</div>
       </div>
     </div>
   </div>
@@ -23,11 +32,17 @@ import { fromNowFilter } from "./../utils/mixins";
 export default {
   name: "MessageUsersCards",
   mixins: [emptyImageFilter, fromNowFilter],
-   props: {
+  props: {
     rooms: {
       type: Array,
       required: true,
-    }
+    },
+  },
+  methods: {
+    getPrivateMessages(roomId) {
+      this.$socket.client.emit("get private messages", roomId);
+      console.log(`get private messages: ${roomId}`);
+    },
   },
 };
 </script>
@@ -49,6 +64,7 @@ export default {
   position: relative;
   padding: 10px 10px 10px 15px;
   border-bottom: 1px solid $modal-outline;
+  cursor: pointer;
 }
 
 .message-card-img {

@@ -101,6 +101,7 @@ export default {
     sendMessage() {
       if (this.inputMessage) {
         console.log("sendMessage: ", this.inputMessage);
+        //TODO: 要傳{roomId,message}
         this.$socket.client.emit("public message", this.inputMessage);
         this.inputMessage = "";
       }
