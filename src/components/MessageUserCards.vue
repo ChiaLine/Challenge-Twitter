@@ -41,6 +41,7 @@ export default {
   methods: {
     getPrivateMessages(roomId) {
       this.$socket.client.emit("get private messages", roomId);
+      this.$emit('change-room-id', roomId)
       console.log(`get private messages: ${roomId}`);
     },
   },

@@ -4,7 +4,7 @@
 
     <!-- 左區卡片 -->
     <div class="message-users">
-      <MessageUserCards :rooms="rooms"/>
+      <MessageUserCards :rooms="rooms" @change-room-id="changeRoomId" />
     </div>
 
     <!-- 右區聊天室 -->
@@ -51,7 +51,12 @@
           </div>
         </div>
         <div class="input-container">
-          <input v-model="inputMessage" type="text" placeholder="輸入訊息..." />
+          <input
+            @keyup.enter="sendMessage"
+            v-model="inputMessage"
+            type="text"
+            placeholder="輸入訊息..."
+          />
           <button @click="sendMessage">
             <img src="https://i.imgur.com/Jrjlukd.jpg" alt="" />
           </button>
@@ -85,6 +90,7 @@ export default {
       inputMessage: "",
       rooms: [],
       previousMessages: [],
+      currentRoomId: -1,
     };
   },
   computed: {
@@ -98,11 +104,17 @@ export default {
     afterHideModal() {
       this.showModal = false;
     },
+    changeRoomId(newRoomId) {
+      console.log("newRoomId", newRoomId);
+      this.currentRoomId = newRoomId;
+    },
     sendMessage() {
       if (this.inputMessage) {
         console.log("sendMessage: ", this.inputMessage);
-        //TODO: 要傳{roomId,message}
-        this.$socket.client.emit("public message", this.inputMessage);
+        this.$socket.client.emit("private message", {
+          roomId: this.currentRoomId,
+          message: this.inputMessage,
+        });
         this.inputMessage = "";
       }
     },
@@ -129,12 +141,12 @@ export default {
     // 接收私信列表
     [`private message list`]: function (users) {
       console.log("接收私信列表: ", users);
-      this.rooms = users
+      this.rooms = users;
     },
     // 接收私人消息
     [`private message`]: function (msg) {
       console.log("接收私人訊息: ", msg);
-    }
+    },
   },
   created() {
     console.log("私人聊天室", this.previousMessages.length);
