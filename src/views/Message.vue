@@ -144,7 +144,7 @@ export default {
       if (this.currentRoomId !== newRoomId) {
         this.currentRoomId = newRoomId;
         // 切換私聊房間後，清空對話紀錄
-        this.previousMessages = [];
+        // this.previousMessages = [];
         this.messages = [];
       }
     },
@@ -178,6 +178,7 @@ export default {
     [`private message list`]: function (users) {
       console.log("接收私信列表: ", users);
       this.rooms = users;
+      this.currentRoomId = users[0].id;
     },
     // 獲取歷史聊天紀錄（???）
     [`render private messages`]: function (data) {
@@ -234,6 +235,7 @@ export default {
     },
   },
   created() {
+    alert("相關功能正在開發中，如使用中遇到錯誤，煩請重新整理畫面，謝謝");
     console.log("私人聊天室", this.previousMessages.length);
     // 告知伺服器使用者上線
     this.connectUser();

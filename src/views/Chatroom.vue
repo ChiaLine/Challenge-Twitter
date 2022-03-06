@@ -180,7 +180,7 @@ export default {
             typeId: 2,
             type: "other",
             time: msg.createdAt,
-            avatar: msg.senderAvatar,
+            avatar: msg.Receiver.avatar,
           };
           this.previousMessages.unshift(thisMessage);
         }
@@ -247,6 +247,7 @@ export default {
     console.log("previousMessages", this.previousMessages.length);
     // 告知伺服器使用者上線
     this.connectUser();
+    alert("相關功能正在開發中，如使用中遇到錯誤，煩請重新整理畫面，謝謝");
   },
   beforeDestroy() {
     // 離開頁面時告知後端伺服器
