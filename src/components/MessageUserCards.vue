@@ -12,36 +12,6 @@
         </div>
         <div class="message-time">時間</div>
       </div>
-      <div class="message-card d-flex justify-content-start align-items-center">
-        <img class="message-card-img" :src="null | emptyImage" />
-        <div class="message-content">
-          <p class="message-name">
-            name <span class="message-account"> @account </span>
-          </p>
-          <p class="message-description">description Nulla Lorem mollit cupidatat irure....</p>
-        </div>
-        <div class="message-time">時間</div>
-      </div>
-      <div class="message-card d-flex justify-content-start align-items-center">
-        <img class="message-card-img" :src="null | emptyImage" />
-        <div class="message-content">
-          <p class="message-name">
-            name <span class="message-account"> @account </span>
-          </p>
-          <p class="message-description">description Nulla Lorem mollit cupidatat irure....</p>
-        </div>
-        <div class="message-time">時間</div>
-      </div>
-      <div class="message-card d-flex justify-content-start align-items-center">
-        <img class="message-card-img" :src="null | emptyImage" />
-        <div class="message-content">
-          <p class="message-name">
-            name <span class="message-account"> @account </span>
-          </p>
-          <p class="message-description">description Nulla Lorem mollit cupidatat irure....</p>
-        </div>
-        <div class="message-time">時間</div>
-      </div>
     </div>
   </div>
 </template>
@@ -52,6 +22,12 @@ import { emptyImageFilter } from "../utils/mixins";
 export default {
   name: "MessageUsersCards",
   mixins: [emptyImageFilter],
+   props: {
+    users: {
+      type: Array,
+      required: true,
+    }
+  },
 };
 </script>
 
