@@ -235,7 +235,7 @@ export default {
     },
   },
   created() {
-    alert("相關功能正在開發中，如使用中遇到錯誤，煩請重新整理畫面，謝謝");
+    alert("您確定要進入私人訊息嗎？ 若是，請按下確定");
     console.log("私人聊天室", this.previousMessages.length);
     // 告知伺服器使用者上線
     this.connectUser();
