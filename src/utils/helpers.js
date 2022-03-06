@@ -1,7 +1,7 @@
 // ./src/utils/helpers.js
 import axios from 'axios'
 import Swal from 'sweetalert2'
-import path from 'path'
+// import path from 'path'
 
 // 正式後端伺服器
 const baseURL = 'https://twitter-api-chatroom.herokuapp.com'
@@ -10,7 +10,7 @@ const baseURL = 'https://twitter-api-chatroom.herokuapp.com'
 // const baseURL = 'https://e111-150-117-29-118.ngrok.io'
 
 export const apiHelper = axios.create({
-  baseURL: path.join(baseURL, 'api')
+  baseURL: 'https://twitter-api-chatroom.herokuapp.com/api'
 })
 
 export const socketURL = baseURL
