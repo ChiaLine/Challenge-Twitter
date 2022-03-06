@@ -2,45 +2,24 @@
   <div class="message">
     <p class="message-title">訊息</p>
     <div class="message-cards">
-      <div class="message-card d-flex justify-content-start align-items-center">
-        <img class="message-card-img" :src="null | emptyImage" />
+      <div
+        v-for="room in rooms"
+        :key="room.index"
+        @click.stop.prevent="getPrivateMessages(room.id)"
+        class="message-card d-flex justify-content-start align-items-center"
+      >
+        <img
+          class="message-card-img"
+          :src="room.receiver.avatar | emptyImage"
+        />
         <div class="message-content">
           <p class="message-name">
-            name <span class="message-account"> @account </span>
+            {{ room.receiver.name }}
+            <span class="message-account"> @{{ room.receiver.account }} </span>
           </p>
-          <p class="message-description">description Nulla Lorem mollit cupidatat irure....</p>
+          <p class="message-description">{{ room.receiver.introduction }}</p>
         </div>
-        <div class="message-time">時間</div>
-      </div>
-      <div class="message-card d-flex justify-content-start align-items-center">
-        <img class="message-card-img" :src="null | emptyImage" />
-        <div class="message-content">
-          <p class="message-name">
-            name <span class="message-account"> @account </span>
-          </p>
-          <p class="message-description">description Nulla Lorem mollit cupidatat irure....</p>
-        </div>
-        <div class="message-time">時間</div>
-      </div>
-      <div class="message-card d-flex justify-content-start align-items-center">
-        <img class="message-card-img" :src="null | emptyImage" />
-        <div class="message-content">
-          <p class="message-name">
-            name <span class="message-account"> @account </span>
-          </p>
-          <p class="message-description">description Nulla Lorem mollit cupidatat irure....</p>
-        </div>
-        <div class="message-time">時間</div>
-      </div>
-      <div class="message-card d-flex justify-content-start align-items-center">
-        <img class="message-card-img" :src="null | emptyImage" />
-        <div class="message-content">
-          <p class="message-name">
-            name <span class="message-account"> @account </span>
-          </p>
-          <p class="message-description">description Nulla Lorem mollit cupidatat irure....</p>
-        </div>
-        <div class="message-time">時間</div>
+        <div class="message-time">{{ room.createdAt | fromNow }}</div>
       </div>
     </div>
   </div>
@@ -48,10 +27,24 @@
 
 <script>
 import { emptyImageFilter } from "../utils/mixins";
+import { fromNowFilter } from "./../utils/mixins";
 
 export default {
   name: "MessageUsersCards",
-  mixins: [emptyImageFilter],
+  mixins: [emptyImageFilter, fromNowFilter],
+  props: {
+    rooms: {
+      type: Array,
+      required: true,
+    },
+  },
+  methods: {
+    getPrivateMessages(roomId) {
+      this.$socket.client.emit("get private messages", roomId);
+      this.$emit('change-room-id', roomId)
+      console.log(`get private messages: ${roomId}`);
+    },
+  },
 };
 </script>
 
@@ -59,6 +52,8 @@ export default {
 @import "../assets/scss/_color.scss";
 .message {
   width: 390px;
+  height: 100%;
+  overflow-y: scroll;
 }
 .message-title {
   height: 74px;
@@ -72,8 +67,8 @@ export default {
   position: relative;
   padding: 10px 10px 10px 15px;
   border-bottom: 1px solid $modal-outline;
+  cursor: pointer;
 }
-
 .message-card-img {
   width: 50px;
   height: 50px;

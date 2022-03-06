@@ -4,7 +4,7 @@
 
     <!-- 左區卡片 -->
     <div class="chatroom-users">
-      <ChatroomUserCards :users="users"/>
+      <ChatroomUserCards :users="users" />
     </div>
 
     <!-- 右區聊天室 -->
@@ -83,14 +83,19 @@
           </template>
         </div>
         <div class="input-container">
-          <input @keyup.enter="sendMessage" v-model="inputMessage" type="text" placeholder="輸入訊息..." />
+          <input
+            @keyup.enter="sendMessage"
+            v-model="inputMessage"
+            type="text"
+            placeholder="輸入訊息..."
+          />
           <button @click="sendMessage">
             <img src="https://i.imgur.com/Jrjlukd.jpg" alt="" />
           </button>
         </div>
       </div>
     </div>
-    
+
     <TweetModal v-if="showModal" @after-hide-modal="afterHideModal" />
   </div>
 </template>
@@ -102,18 +107,6 @@ import TweetModal from "../components/TweetModal.vue";
 import { mapState } from "vuex";
 import { formatDateFilter } from "./../utils/mixins";
 import { emptyImageFilter } from "../utils/mixins";
-// 取得socketURL 設定在 helpers.js
-import { socketURL } from "../utils/helpers";
-
-// 目前正常顯示上下線通知、歷史聊天紀錄等功能，尚未發布到正式伺服器，因此更新前會收不到
-// 取當前使用者token
-const TOKEN = localStorage.getItem("token");
-
-const { io } = require("socket.io-client");
-// 連線建立
-const socket = io(socketURL, {
-  auth: { token: TOKEN },
-});
 
 export default {
   name: "Chatroom",
@@ -128,8 +121,11 @@ export default {
       messages: [],
       inputMessage: "",
       users: [],
-      previousMessages: []
+      previousMessages: [],
     };
+  },
+  computed: {
+    ...mapState(["currentUser"]),
   },
   mixins: [emptyImageFilter, formatDateFilter],
   methods: {
@@ -142,61 +138,62 @@ export default {
     sendMessage() {
       if (this.inputMessage) {
         console.log("sendMessage: ", this.inputMessage);
-        socket.emit("public message", this.inputMessage);
+        this.$socket.client.emit("public message", this.inputMessage);
         this.inputMessage = "";
       }
     },
     // 頁面切換到公開聊天室時呼叫(created)
     connectUser() {
-      socket.connect();
-      console.log('切換聊天室')
+      console.log("進入聊天室");
+      this.$socket.client.emit("enter chatroom");
     },
     // 頁面離開公開聊天室時呼叫(beforeDestroy)
     disconnectUser() {
-      socket.disconnect(true);
-      console.log('離開聊天室')
+      console.log("離開聊天室");
+      this.$socket.client.emit("leave chatroom");
     },
   },
-  created() {
-    console.log('previousMessages', this.previousMessages.length)
-    // 告知伺服器使用者上線
-    this.connectUser();
+  // 監聽事件放的位置
+  sockets: {
+    connect: function () {
+      console.log("web socket success");
+    },
     // 獲取歷史聊天紀錄（後端只有在被告知使用者上線時，才會送出）
-    socket.on("render public messages", (data) => {
+    [`render public messages`]: function (data) {
       console.log("msg清單: ", data);
-
-      for(let i = 0; i < data.length ; i++ ){
+      for (let i = 0; i < data.length; i++) {
         const msg = data[i];
         if (msg.senderId === this.currentUser.id) {
-        const thisMessage = {
-          id: -1,
-          content: msg.message,
-          typeId: 3,
-          type: "self",
-          time: msg.createdAt,
-          avatar: "",
-        };
-        this.previousMessages.unshift(thisMessage);
-      } else {
-        const thisMessage = {
-          id: -1,
-          content: msg.message,
-          typeId: 2,
-          type: "other",
-          time: msg.createdAt,
-          avatar: msg.senderAvatar,
-        };
-        this.previousMessages.unshift(thisMessage);
+          const thisMessage = {
+            id: -1,
+            content: msg.message,
+            typeId: 3,
+            type: "self",
+            time: msg.createdAt,
+            avatar: "",
+          };
+          this.previousMessages.unshift(thisMessage);
+        } else {
+          const thisMessage = {
+            id: -1,
+            content: msg.message,
+            typeId: 2,
+            type: "other",
+            time: msg.createdAt,
+            avatar: msg.senderAvatar,
+          };
+          this.previousMessages.unshift(thisMessage);
+        }
       }
-    } 
-      
-    });
+    },
     // 這是接收目前在聊天室的使用者清單
-    socket.on("users", (users) => {
-      this.users = users
-    });
+    users: function (users) {
+      console.log("目前在聊天室的使用者清單: ", users);
+      this.users = users;
+    },
     // 接收訊息其他使用者、自己的文字訊息
-    socket.on("public message", (msg) => {
+    [`public message`]: function (msg) {
+      console.log("接收訊息: ", msg);
       if (msg.senderId === this.currentUser.id) {
         const thisMessage = {
           id: -1,
@@ -218,9 +215,10 @@ export default {
         };
         this.messages.unshift(thisMessage);
       }
-    });
+    },
     // 接收並顯示使用者上線通知
-    socket.on("user connect", (msg) => {
+    [`user connect`]: function (msg) {
+      console.log("使用者上線通知: ", msg);
       const thisMessage = {
         id: -1,
         content: msg,
@@ -230,9 +228,10 @@ export default {
         avatar: "",
       };
       this.messages.unshift(thisMessage);
-    });
+    },
     // 接收並顯示使用者離線通知
-    socket.on("user disconnect", (msg) => {
+    [`user disconnect`]: function (msg) {
+      console.log("使用者離線通知: ", msg);
       const thisMessage = {
         id: -1,
         content: msg,
@@ -242,20 +241,22 @@ export default {
         avatar: "",
       };
       this.messages.unshift(thisMessage);
-    });
+    },
+  },
+  created() {
+    console.log("previousMessages", this.previousMessages.length);
+    // 告知伺服器使用者上線
+    this.connectUser();
   },
   beforeDestroy() {
     // 離開頁面時告知後端伺服器
     this.disconnectUser();
     // 新增
-    socket.off("render public messages");
-    socket.off("users");
-    socket.off("public message");
-    socket.off("user connect");
-    socket.off("user disconnect");
-  },
-  computed: {
-    ...mapState(["currentUser"]),
+    this.$socket.client.off("render public messages");
+    this.$socket.client.off("users");
+    this.$socket.client.off("public message");
+    this.$socket.client.off("user connect");
+    this.$socket.client.off("user disconnect");
   },
 };
 </script>

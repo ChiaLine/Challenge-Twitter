@@ -10,7 +10,7 @@ const baseURL = 'https://twitter-api-chatroom.herokuapp.com'
 // const baseURL = 'https://e111-150-117-29-118.ngrok.io'
 
 export const apiHelper = axios.create({
-  baseURL: 'https://twitter-api-chatroom.herokuapp.com/api'
+  baseURL: `${baseURL}/api`
 })
 
 export const socketURL = baseURL

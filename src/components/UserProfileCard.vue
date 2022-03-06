@@ -31,7 +31,9 @@
         編輯個人資料
       </button>
       <div v-else class="followOther position-absolute d-flex">
-        <button class="iconWrapper d-flex">
+        <button class="iconWrapper d-flex" 
+        @click.stop.prevent="sendMessage(user.id)"
+        >
           <img
             class="iconMail m-auto"
             src="https://imgur.com/nBCwk65.png"
@@ -193,6 +195,13 @@ export default {
         });
         this.isProcessing = false;
       }
+    },
+    // 使用socket發送使用者id給後端給
+    sendMessage(userId) {
+      console.log("發送userId給後端: ", userId);
+      this.$socket.client.emit("to private message", userId);
+      // 轉到私人訊息頁面
+      this.$router.push({ name: "Message" });
     },
   },
   watch: {

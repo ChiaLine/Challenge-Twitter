@@ -4,7 +4,7 @@
 
     <!-- 左區卡片 -->
     <div class="message-users">
-      <MessageUserCards />
+      <MessageUserCards :rooms="rooms" @change-room-id="changeRoomId" />
     </div>
 
     <!-- 右區聊天室 -->
@@ -14,7 +14,7 @@
         <span class="message-content-account">@account</span>
       </div>
       <div class="chatroom-container">
-    <div class="display-container">
+        <div class="display-container">
           <!-- 注意！訊息上下順序是相反的(column-reverse) -->
           <!-- 判斷是哪種訊息，搭配對應的class -->
           <div
@@ -49,14 +49,54 @@
               <p class="time">{{ message.time | formatDate }}</p>
             </div>
           </div>
+          <!-- 秀歷史訊息 -->
+          <template v-if="previousMessages.length > 0">
+            <div
+              v-for="message in previousMessages"
+              :key="message.index"
+              :class="{
+                notification: message.typeId === 1,
+                'card-other': message.typeId === 2,
+                'card-self': message.typeId === 3,
+              }"
+            >
+              <!-- v-if判斷相應內容 -->
+              <!-- 1:上線離線通知 -->
+              <span v-if="message.typeId === 1">{{ message.content }}</span>
+              <!-- 2:其他使用者的訊息 -->
+              <div v-if="message.typeId === 2" class="card-other-container">
+                <div class="img-container">
+                  <img :src="message.avatar | emptyImage" alt="avatar" />
+                </div>
+                <div class="content-container">
+                  <div class="text">
+                    {{ message.content }}
+                  </div>
+                  <p class="time">{{ message.time | formatDate }}</p>
+                </div>
+              </div>
+              <!-- 3:自己的訊息 -->
+              <div v-if="message.typeId === 3" class="card-self-container">
+                <div class="text">
+                  {{ message.content }}
+                </div>
+                <p class="time">{{ message.time | formatDate }}</p>
+              </div>
+            </div>
+          </template>
         </div>
-    <div class="input-container">
-      <input v-model="inputMessage" type="text" placeholder="輸入訊息..." />
-      <button @click="sendMessage">
-        <img src="https://i.imgur.com/Jrjlukd.jpg" alt="" />
-      </button>
-    </div>
-  </div>
+        <div class="input-container">
+          <input
+            @keyup.enter="sendMessage"
+            v-model="inputMessage"
+            type="text"
+            placeholder="輸入訊息..."
+          />
+          <button @click="sendMessage">
+            <img src="https://i.imgur.com/Jrjlukd.jpg" alt="" />
+          </button>
+        </div>
+      </div>
     </div>
 
     <TweetModal v-if="showModal" @after-hide-modal="afterHideModal" />
@@ -71,16 +111,6 @@ import { mapState } from "vuex";
 import { formatDateFilter } from "./../utils/mixins";
 import { emptyImageFilter } from "../utils/mixins";
 
-const URL1 = "https://twitter-api-chatroom.herokuapp.com/";
-const TOKEN = localStorage.getItem('token')
-
-const { io } = require("socket.io-client");
-
-const socket = io(URL1, {
-  auth: { token: TOKEN },
-});
-
-
 export default {
   name: "Message",
   components: {
@@ -93,21 +123,94 @@ export default {
       showModal: false,
       messages: [],
       inputMessage: "",
+      rooms: [],
+      previousMessages: [],
+      currentRoomId: -1,
     };
   },
+  computed: {
+    ...mapState(["currentUser"]),
+  },
   mixins: [emptyImageFilter, formatDateFilter],
-  created() {
-    // 這是接收目前在聊天室的使用者清單
-    socket.on("users", (users) => {
-      console.log('目前在聊天室的使用者清單', users);
-    });
-
-    // 接收訊息
-    socket.on("public message", (msg) => {
-      console.log(msg);
-      console.log(typeof msg);
+  methods: {
+    afterShowTweetModal() {
+      this.showModal = true;
+    },
+    afterHideModal() {
+      this.showModal = false;
+    },
+    changeRoomId(newRoomId) {
+      console.log("newRoomId", newRoomId);
+      if (this.currentRoomId !== newRoomId) {
+        this.currentRoomId = newRoomId;
+        // 切換私聊房間後，清空對話紀錄
+        this.previousMessages = [];
+        this.messages = [];
+      }
+    },
+    sendMessage() {
+      if (this.inputMessage) {
+        console.log("sendMessage: ", this.inputMessage);
+        this.$socket.client.emit("private message", {
+          roomId: this.currentRoomId,
+          message: this.inputMessage,
+        });
+        this.inputMessage = "";
+      }
+    },
+    // 頁面切換時呼叫(created)
+    connectUser() {
+      console.log("進入私人聊天室");
+      this.$socket.client.emit("enter private room");
+    },
+    // 頁面離開時呼叫(beforeDestroy)
+    disconnectUser() {
+      console.log("離開私人聊天室");
+      // this.$socket.client.emit("leave chatroom");
+    },
+  },
+  // 監聽事件放的位置
+  sockets: {
+    connect: function () {
+      console.log("私人聊天室 web socket success");
+    },
+    // 接收私信列表
+    [`private message list`]: function (users) {
+      console.log("接收私信列表: ", users);
+      this.rooms = users;
+    },
+    // 獲取歷史聊天紀錄（???）
+    [`render private messages`]: function (data) {
+      console.log("獲取歷史訊息: ", data);
+      for (let i = 0; i < data.length; i++) {
+        const msg = data[i];
+        if (msg.senderId === this.currentUser.id) {
+          const thisMessage = {
+            id: -1,
+            content: msg.message,
+            typeId: 3,
+            type: "self",
+            time: msg.createdAt,
+            avatar: "",
+          };
+          this.previousMessages.unshift(thisMessage);
+        } else {
+          const thisMessage = {
+            id: -1,
+            content: msg.message,
+            typeId: 2,
+            type: "other",
+            time: msg.createdAt,
+            avatar: msg.senderAvatar,
+          };
+          this.previousMessages.unshift(thisMessage);
+        }
+      }
+    },
+    // 接收私人消息
+    [`private message`]: function (msg) {
+      console.log("接收私人訊息: ", msg);
       if (msg.senderId === this.currentUser.id) {
-        console.log("self msg");
         const thisMessage = {
           id: -1,
           content: msg.message,
@@ -118,7 +221,6 @@ export default {
         };
         this.messages.unshift(thisMessage);
       } else {
-        console.log("other msg");
         const thisMessage = {
           id: -1,
           content: msg.message,
@@ -129,55 +231,26 @@ export default {
         };
         this.messages.unshift(thisMessage);
       }
-    });
-    // 接收使用者上線通知
-    socket.on("user connect", (msg) => {
-      const thisMessage = {
-        id: -1,
-        content: msg,
-        typeId: 1,
-        type: "notification",
-        time: "",
-        avatar: "",
-      };
-      this.messages.unshift(thisMessage);
-    });
-    // 接收使用者離線通知
-    socket.on("user disconnect", (msg) => {
-      const thisMessage = {
-        id: -1,
-        content: msg,
-        typeId: 1,
-        type: "notification",
-        time: "",
-        avatar: "",
-      };
-      this.messages.unshift(thisMessage);
-    });
-  },
-  methods: {
-    afterShowTweetModal() {
-      this.showModal = true;
-    },
-    afterHideModal() {
-      this.showModal = false;
-    },
-    // 這是送出聊天內容的按鈕
-    sendMessage() {
-      if (this.inputMessage) {
-        console.log('送出訊息')
-        socket.emit("public message", this.inputMessage);
-        this.inputMessage = "";
-      }
     },
   },
-  computed: {
-    ...mapState(["currentUser"]),
+  created() {
+    console.log("私人聊天室", this.previousMessages.length);
+    // 告知伺服器使用者上線
+    this.connectUser();
+  },
+  beforeDestroy() {
+    // 離開頁面時告知後端伺服器
+    this.disconnectUser();
+    // 新增
+    this.$socket.client.off("render private messages");
+    this.$socket.client.off("private message list");
+    this.$socket.client.off("private message");
   },
 };
 </script>
 
 <style lang="scss" scoped>
+// 聊天室訊息輸入框、訊息顯示區域設定
 @import "../assets/scss/chatroom.scss";
 /* 左區卡片 */
 .message-users {
@@ -206,7 +279,7 @@ export default {
 
 .message-content-account {
   margin-left: 20px;
-  color: #6C757D;
+  color: #6c757d;
 }
 
 /* 聊天內容區 */
