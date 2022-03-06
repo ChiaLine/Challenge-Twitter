@@ -2,15 +2,15 @@
   <div class="message">
     <p class="message-title">訊息</p>
     <div class="message-cards">
-      <div class="message-card d-flex justify-content-start align-items-center">
-        <img class="message-card-img" :src="null | emptyImage" />
+      <div v-for="room in rooms" :key="room.index" class="message-card d-flex justify-content-start align-items-center">
+        <img class="message-card-img" :src="room.receiver.avatar | emptyImage" />
         <div class="message-content">
           <p class="message-name">
-            name <span class="message-account"> @account </span>
+            {{room.receiver.name}} <span class="message-account"> @{{room.receiver.account}} </span>
           </p>
-          <p class="message-description">description Nulla Lorem mollit cupidatat irure....</p>
+          <p class="message-description">{{room.receiver.introduction}}</p>
         </div>
-        <div class="message-time">時間</div>
+        <div class="message-time">{{room.createdAt | fromNow }}</div>
       </div>
     </div>
   </div>
@@ -18,12 +18,13 @@
 
 <script>
 import { emptyImageFilter } from "../utils/mixins";
+import { fromNowFilter } from "./../utils/mixins";
 
 export default {
   name: "MessageUsersCards",
-  mixins: [emptyImageFilter],
+  mixins: [emptyImageFilter, fromNowFilter],
    props: {
-    users: {
+    rooms: {
       type: Array,
       required: true,
     }

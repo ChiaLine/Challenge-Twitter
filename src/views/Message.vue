@@ -4,7 +4,7 @@
 
     <!-- 左區卡片 -->
     <div class="message-users">
-      <MessageUserCards :users="users"/>
+      <MessageUserCards :rooms="rooms"/>
     </div>
 
     <!-- 右區聊天室 -->
@@ -83,7 +83,7 @@ export default {
       showModal: false,
       messages: [],
       inputMessage: "",
-      users: [],
+      rooms: [],
       previousMessages: [],
     };
   },
@@ -128,7 +128,7 @@ export default {
     // 接收私信列表
     [`private message list`]: function (users) {
       console.log("接收私信列表: ", users);
-      this.users = users
+      this.rooms = users
     },
     // 接收私人消息
     [`private message`]: function (msg) {
