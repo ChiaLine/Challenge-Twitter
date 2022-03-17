@@ -104,6 +104,6 @@ export default {
 }
 </script>
 
-<style lang="scss">
-@import "../assets/scss/admin-navbar.scss";
+<style lang="scss" scoped>
+@import "../assets/scss/navbar.scss";
 </style>
