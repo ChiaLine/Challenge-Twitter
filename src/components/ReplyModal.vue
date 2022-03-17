@@ -57,7 +57,7 @@
 <script>
 import { emptyImageFilter } from "../utils/mixins";
 import { fromNowFilter } from "./../utils/mixins";
-import replyModalAPI from "./../apis/replyModal";
+import replyModalAPI from "./../apis/replyData";
 import { Toast } from "./../utils/helpers";
 import { mapState } from "vuex";
 
@@ -97,8 +97,8 @@ export default {
     // 請求回傳被回覆的tweet資料
     async fetchReplyTweet() {
       try {
-        const id = this.replyTweetId;
-        let response = await replyModalAPI.getReplyListTweet(id);
+        const tweetId = this.replyTweetId;
+        let response = await replyModalAPI.getReplyListTweet(tweetId);
         const { data } = response;
         this.tweet = data;
         this.isLoading = false;

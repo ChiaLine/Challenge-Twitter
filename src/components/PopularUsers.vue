@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import popularListAPI from "../apis/popularList";
+import popularListAPI from "../apis/followData";
 import { Toast } from "../utils/helpers";
 import { emptyImageFilter } from "../utils/mixins";
 

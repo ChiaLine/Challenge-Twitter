@@ -103,7 +103,7 @@
 import { emptyImageFilter } from "../utils/mixins";
 import { Toast } from "./../utils/helpers";
 import { mapState } from "vuex";
-import userEditModalAPI from "./../apis/userEditModal";
+import userEditModalAPI from "./../apis/userData";
 
 export default {
   name: "UserEditModal",
@@ -166,7 +166,7 @@ export default {
         const formData = new FormData(form);
         // 串接API送出表單資料
         const userId = this.user.id;
-        const response = await userEditModalAPI.updateUserData({
+        const response = await userEditModalAPI.updateUserProfile({
           userId,
           formData,
         });

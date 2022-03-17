@@ -170,8 +170,8 @@
 <script>
 import { emptyImageFilter } from "../utils/mixins";
 import { formatDateFilter } from "./../utils/mixins";
-import userTweetsAPI from "../apis/userTweets";
-import tweetAPI from "../apis/tweetCards";
+import userTweetsAPI from "../apis/userData";
+import tweetAPI from "../apis/tweetData";
 import { Toast } from "../utils/helpers";
 import { mapState } from "vuex";
 
