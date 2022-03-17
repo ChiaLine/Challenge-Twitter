@@ -1,13 +1,12 @@
 <template>
-  <div class="h-100 d-flex justify-content-center">
-    <NavBar @after-show-tweet-modal="afterShowTweetModal" />
-    <div class="main">
-      <h5 class="title p-3">帳戶設定</h5>
-      <div class="setProfile">
+  <div class="row">
+    <NavBar class="col-2" @after-show-tweet-modal="afterShowTweetModal" />
+    <div class="setting-main col-10">
+      <h5 class="setting-title p-3">帳戶設定</h5>
+      <div class="setting-form">
         <SetProfile class="p-3" @after-submit="handleAfterSubmit" />
       </div>
     </div>
-    <div class="right"></div>
     <TweetModal v-if="showModal" @after-hide-modal="afterHideModal" />
   </div>
 </template>
@@ -64,16 +63,15 @@ export default {
 </script>
 
 <style scoped>
-.main {
-  min-width: 600px;
+.setting-main {
   border-left: 1px solid #e6ecf0;
+  padding: 0;
 }
-.right {
-  width: 390px;
-  height: 57px;
-  border-bottom: 1px solid #e6ecf0;
+.setting-form {
+  max-width: 600px;
 }
-.title {
+
+.setting-title {
   border-bottom: 1px solid #e6ecf0;
 }
 </style>
