@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar">
+  <nav class="navbar ">
     <div class="navbar-logo">
       <a class="navbar-link" href="#/User">
         <img src="https://i.imgur.com/WwFWS1D.png" />
@@ -20,7 +20,7 @@
         >
           <img class="navbar-icon home" :src="item.iconActive" v-if="item.active"/>
           <img class="navbar-icon home" :src="item.icon" v-else/>
-          <span>{{ item.title }}</span>
+          <span class="navbar-title-none">{{ item.title }}</span>
         </router-link>
       </li>
       <li class="nav-item">
@@ -102,11 +102,6 @@ export default {
     this.fetchNavItems();
     this.new = this.$route.name
   },
-  // watch: {
-  //   new(newValue) {
-
-  //   }
-  // },
   methods: {
     fetchNavItems() {
       const { navItems } = dummyData
@@ -148,7 +143,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "../assets/scss/navbar.scss";
 .navbar-icon {
   border-radius: 5px;
