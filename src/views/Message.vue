@@ -9,11 +9,36 @@
 
     <!-- 右區聊天室 -->
     <div class="message-content col-6">
-      <div class="message-content-title">
-        <p class="message-content-name">name</p>
-        <span class="message-content-account">@account</span>
+      <!-- 新增 聊天室上方 標題區塊的 顯示判斷 -->
+      <div class="message-content-title" v-if="!thisMessageName.length">
+        <!-- 顯示空白內容 -->
       </div>
-      <div class="chatroom-container">
+      <div class="message-content-title" v-else>
+        <p class="message-content-name">{{thisMessageName[0].name}}</p>
+        <span class="message-content-account">@{{thisMessageName[0].account}}</span>
+      </div>
+      <!-- 新增 聊天室底下 訊息區塊的 顯示判斷 -->
+      <div class="chatroom-container" v-if="!thisMessageName.length">
+        <!-- 新增 訊息區塊內 圖片提示 -->
+        <div class="display-container-text">
+          <div class="display-container-img">
+            <img src="https://i.imgur.com/VG0wE3w.jpg" >
+          </div>
+        </div>
+        <!-- 新增 訊息區塊內 輸入框禁用提示 -->
+        <div class="input-container">
+          <input
+            class="input-container-cursor-not-allowed"
+            type="text"
+            placeholder="無法輸入訊息..."
+            disabled
+          />
+          <button class="input-container-cursor-not-allowed">
+            <img src="https://i.imgur.com/Jrjlukd.jpg" />
+          </button>
+        </div>
+      </div>
+      <div class="chatroom-container" v-else>
         <div class="display-container">
           <!-- 注意！訊息上下順序是相反的(column-reverse) -->
           <!-- 判斷是哪種訊息，搭配對應的class -->
@@ -126,6 +151,7 @@ export default {
       rooms: [],
       previousMessages: [],
       currentRoomId: -1,
+      thisMessageName: [],
     };
   },
   computed: {
@@ -144,7 +170,6 @@ export default {
       if (this.currentRoomId !== newRoomId) {
         this.currentRoomId = newRoomId;
         // 切換私聊房間後，清空對話紀錄
-        // this.previousMessages = [];
         this.messages = [];
       }
     },
@@ -158,33 +183,39 @@ export default {
         this.inputMessage = "";
       }
     },
-    // 頁面切換時呼叫(created)
+    // 頁面切換時 進入私人聊天室 呼叫(created)
     connectUser() {
       console.log("進入私人聊天室");
       this.$socket.client.emit("enter private room");
     },
-    // 頁面離開時呼叫(beforeDestroy)
+    // 頁面離開時 離開私人聊天室 呼叫(beforeDestroy)
     disconnectUser() {
       console.log("離開私人聊天室");
-      // this.$socket.client.emit("leave chatroom");
+      this.$socket.client.emit("leave chatroom");
     },
   },
   // 監聽事件放的位置
   sockets: {
-    connect: function () {
-      console.log("私人聊天室 web socket success");
-    },
+    // connect: function () {
+    //   console.log("私人聊天室 web socket success");
+    // },
     // 接收私信列表
     [`private message list`]: function (users) {
-      console.log("接收私信列表: ", users);
+      console.log("接收私信使用者的列表: ", users);
       this.rooms = users;
       this.currentRoomId = users[0].id;
     },
     // 獲取歷史聊天紀錄（???）
     [`render private messages`]: function (data) {
       console.log("獲取歷史訊息: ", data);
-      for (let i = 0; i < data.length; i++) {
-        const msg = data[i];
+      // 清空歷史訊息
+      this.previousMessages = []
+      this.thisMessageName = []
+      // 更新要聊天的朋友名稱
+      this.thisMessageName.push(data.otherUser);
+      // 更新歷史訊息資料
+      for (let i = 0; i < data.messages.length; i++) {
+        const msg = data.messages[i];
         if (msg.senderId === this.currentUser.id) {
           const thisMessage = {
             id: -1,
@@ -202,7 +233,7 @@ export default {
             typeId: 2,
             type: "other",
             time: msg.createdAt,
-            avatar: msg.senderAvatar,
+            avatar: msg.Receiver.avatar,
           };
           this.previousMessages.unshift(thisMessage);
         }
@@ -235,8 +266,6 @@ export default {
     },
   },
   created() {
-    // alert("您確定要進入私人訊息嗎？ 若是，請按下確定");
-    console.log("私人聊天室", this.previousMessages.length);
     // 告知伺服器使用者上線
     this.connectUser();
   },
@@ -256,7 +285,6 @@ export default {
 @import "../assets/scss/chatroom.scss";
 /* 左區卡片 */
 .message-users {
-  // min-width: 390px;
   width: 100%;
   border-left: 1px solid #e6ecf0;
   border-right: 1px solid #e6ecf0;
@@ -264,7 +292,6 @@ export default {
 
 /* 右區聊天室 */
 .message-content {
-  // min-width: 600px;
   width: 100%;
   height: 100%;
   display: flex;
@@ -315,4 +342,17 @@ export default {
   width: 25px;
   height: 25px;
 }
+// 新增關於啟動聊天室的畫面效果
+.display-container-text {
+  width: 100%;
+  height: 100%;
+  cursor: not-allowed;
+}
+.display-container-img {
+  height: 850px;
+}
+.input-container-cursor-not-allowed {
+  cursor: not-allowed; 
+}
+
 </style>
