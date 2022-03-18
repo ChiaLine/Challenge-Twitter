@@ -17,7 +17,7 @@
 <script>
 import ReplyListTweet from "./../components/ReplyListTweet";
 import ReplyListCards from "./../components/ReplyListCards";
-import replyListAPI from "./../apis/replyList";
+import replyListAPI from "./../apis/replyData";
 import { Toast } from "./../utils/helpers";
 
 export default {

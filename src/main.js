@@ -6,6 +6,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import './assets/scss/styles.scss'
+import './assets/scss/all-breakpoints.scss'
 
 import { socketURL } from "./utils/helpers";
 

@@ -65,6 +65,9 @@ export default {
         localStorage.setItem("token", data.token);
         localStorage.setItem("currentUserId", data.user.id);
         this.$store.commit("setCurrentUser", data.user);
+        this.$socket.client.disconnect(true);
+        this.$socket.client.auth.token = data.token;
+        this.$socket.client.connect();
         this.$router.push("./User");
       } catch (e) {
         this.isProcessing = false;

@@ -11,7 +11,7 @@
 <script>
 import UserTweetListCard from "../components/UserTweetListCard.vue";
 import UserProfileCard from "../components/UserProfileCard.vue";
-import getUserDataAPI from "./../apis/getUserData";
+import getUserDataAPI from "./../apis/userData";
 import { Toast } from "./../utils/helpers";
 
 export default {

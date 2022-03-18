@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar">
+  <nav class="navbar ">
     <div class="navbar-logo">
       <a class="navbar-link" href="#/User">
         <img src="https://i.imgur.com/WwFWS1D.png" />
@@ -20,7 +20,7 @@
         >
           <img class="navbar-icon home" :src="item.iconActive" v-if="item.active"/>
           <img class="navbar-icon home" :src="item.icon" v-else/>
-          <span>{{ item.title }}</span>
+          <span class="navbar-title-none">{{ item.title }}</span>
         </router-link>
       </li>
       <li class="nav-item">
@@ -28,7 +28,7 @@
           class="nav-link"
           :to="{name: 'Login'}">
           <img class="navbar-icon home" src="https://i.imgur.com/trtoBHw.png"/>
-          <span @click="logut">登出</span>
+          <span @click="logout">登出</span>
         </router-link>
       </li>
     </ul>
@@ -102,11 +102,6 @@ export default {
     this.fetchNavItems();
     this.new = this.$route.name
   },
-  // watch: {
-  //   new(newValue) {
-
-  //   }
-  // },
   methods: {
     fetchNavItems() {
       const { navItems } = dummyData
@@ -141,14 +136,16 @@ export default {
     handleNavBarTweetButton() {
       this.$emit("after-show-tweet-modal");
     },
-    logut(){
+    logout(){
+      this.$store.commit("revokeAuthentication");
+      this.$socket.client.disconnect(true);
       this.$store.commit("revokeAuthentication");
     }
   }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "../assets/scss/navbar.scss";
 .navbar-icon {
   border-radius: 5px;
