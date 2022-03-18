@@ -1,13 +1,14 @@
 <template>
   <div class="user row">
     <NavBar class="col-2" @after-show-tweet-modal="afterShowTweetModal" />
-    <router-view
-      class="col-7"
-      @after-show-tweet-modal="afterShowTweetModal"
-      @after-show-reply-modal="afterShowReplyModal"
-      @after-show-user-edit-modal="afterShowUserEditModal"
-    />
-    <PopularUsers class="col-3 popular-none"/>
+    <div class="col-10 d-flex">
+      <router-view
+        @after-show-tweet-modal="afterShowTweetModal"
+        @after-show-reply-modal="afterShowReplyModal"
+        @after-show-user-edit-modal="afterShowUserEditModal"
+      />
+      <PopularUsers />
+    </div>
     <TweetModal v-if="showTweetModal" @after-hide-modal="afterHideTweetModal" />
     <ReplyModal
       v-if="showReplyModal"
