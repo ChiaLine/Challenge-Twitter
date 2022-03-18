@@ -28,7 +28,7 @@
           class="nav-link"
           :to="{name: 'Login'}">
           <img class="navbar-icon home" src="https://i.imgur.com/trtoBHw.png"/>
-          <span @click="logut">登出</span>
+          <span @click="logout">登出</span>
         </router-link>
       </li>
     </ul>
@@ -136,7 +136,9 @@ export default {
     handleNavBarTweetButton() {
       this.$emit("after-show-tweet-modal");
     },
-    logut(){
+    logout(){
+      this.$store.commit("revokeAuthentication");
+      this.$socket.client.disconnect(true);
       this.$store.commit("revokeAuthentication");
     }
   }
