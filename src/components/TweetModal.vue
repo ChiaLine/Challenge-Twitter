@@ -29,7 +29,7 @@
 
 <script>
 import { emptyImageFilter } from "../utils/mixins";
-import tweetAPI from "./../apis/tweetModal";
+import tweetAPI from "./../apis/tweetData";
 import { Toast } from "./../utils/helpers";
 import { mapState } from "vuex";
 

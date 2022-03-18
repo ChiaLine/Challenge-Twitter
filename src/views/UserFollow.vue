@@ -37,7 +37,7 @@
 
 <script>
 import FollowCards from "../components/FollowCards.vue";
-import userFollowAPI from "./../apis/userFollow";
+import userDataAPI from "./../apis/userData";
 import { Toast } from "./../utils/helpers";
 
 export default {
@@ -79,7 +79,7 @@ export default {
     // TODO: isLoading
     async fetchUser(userId) {
       try {
-        let response = await userFollowAPI.getUserProfile(userId);
+        let response = await userDataAPI.getUserProfile(userId);
         const { data } = response;
         this.user = { ...data };
       } catch (e) {
