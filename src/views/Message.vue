@@ -1,14 +1,14 @@
 <template>
-  <div class="h-100 d-flex justify-content-center">
-    <NavBar @after-show-tweet-modal="afterShowTweetModal" />
+  <div class="h-100 row">
+    <NavBar class="col-2" @after-show-tweet-modal="afterShowTweetModal" />
 
     <!-- 左區卡片 -->
-    <div class="message-users">
+    <div class="message-users col-4">
       <MessageUserCards :rooms="rooms" @change-room-id="changeRoomId" />
     </div>
 
     <!-- 右區聊天室 -->
-    <div class="message-content">
+    <div class="message-content col-6">
       <div class="message-content-title">
         <p class="message-content-name">name</p>
         <span class="message-content-account">@account</span>
@@ -256,14 +256,16 @@ export default {
 @import "../assets/scss/chatroom.scss";
 /* 左區卡片 */
 .message-users {
-  min-width: 390px;
+  // min-width: 390px;
+  width: 100%;
   border-left: 1px solid #e6ecf0;
   border-right: 1px solid #e6ecf0;
 }
 
 /* 右區聊天室 */
 .message-content {
-  min-width: 600px;
+  // min-width: 600px;
+  width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;

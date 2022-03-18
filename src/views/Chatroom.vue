@@ -1,14 +1,14 @@
 <template>
-  <div class="h-100 d-flex justify-content-center">
-    <NavBar @after-show-tweet-modal="afterShowTweetModal" />
+  <div class="h-100 row">
+    <NavBar class="col-2" @after-show-tweet-modal="afterShowTweetModal" />
 
     <!-- 左區卡片 -->
-    <div class="chatroom-users">
+    <div class="chatroom-users col-4">
       <ChatroomUserCards :users="users" />
     </div>
 
     <!-- 右區聊天室 -->
-    <div class="chatroom-content">
+    <div class="chatroom-content col-6">
       <h5 class="chatroom-content-title p-3">公開聊天室</h5>
       <div class="chatroom-container">
         <div class="display-container">
@@ -268,13 +268,15 @@ export default {
 
 /* 左區卡片 */
 .chatroom-users {
-  min-width: 390px;
+  // min-width: 390px;
+  width: 100%;
   border-left: 1px solid #e6ecf0;
   border-right: 1px solid #e6ecf0;
 }
 
 .chatroom-content {
-  min-width: 600px;
+  // min-width: 600px;
+  width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;

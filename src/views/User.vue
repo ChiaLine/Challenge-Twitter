@@ -1,12 +1,13 @@
 <template>
-  <div class="user w-100 h-100 d-flex justify-content-center">
-    <NavBar @after-show-tweet-modal="afterShowTweetModal" />
+  <div class="user row">
+    <NavBar class="col-2" @after-show-tweet-modal="afterShowTweetModal" />
     <router-view
+      class="col-7"
       @after-show-tweet-modal="afterShowTweetModal"
       @after-show-reply-modal="afterShowReplyModal"
       @after-show-user-edit-modal="afterShowUserEditModal"
     />
-    <PopularUsers />
+    <PopularUsers class="col-3 popular-none"/>
     <TweetModal v-if="showTweetModal" @after-hide-modal="afterHideTweetModal" />
     <ReplyModal
       v-if="showReplyModal"
@@ -70,10 +71,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.user {
-  /* 確認寬度是否有滿版 */
-  /* background-color: rgb(238, 236, 234); */
-}
-</style>

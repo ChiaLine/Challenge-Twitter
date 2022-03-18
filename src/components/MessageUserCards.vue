@@ -51,7 +51,7 @@ export default {
 <style scoped style lang="scss">
 @import "../assets/scss/_color.scss";
 .message {
-  width: 390px;
+  // width: 390px;
   height: 100%;
   overflow-y: scroll;
 }

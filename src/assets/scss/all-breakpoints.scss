@@ -1,0 +1,34 @@
+// 設定斷點
+@media screen and (max-width: 767px) {
+  .user {
+    // background-color: rgb(154, 154, 154);
+  }
+
+  .navbar-title-none {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .user {
+    // background-color: rgb(222, 66, 66);
+  }
+
+  .navbar-title-none {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .user {
+    // background-color: rgb(176, 224, 224);
+  }
+
+  .popular {
+    display: block;
+  }
+
+  .navbar-title-none {
+    display: block;
+  }
+}

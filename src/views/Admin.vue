@@ -1,7 +1,7 @@
 <template>
-  <div class="admin w-100 d-flex justify-content-center">
-    <AdminNavBar />
-    <router-view />
+  <div class="admin row">
+    <AdminNavBar class="col-2"/>
+    <router-view class="col-10"/>
   </div>
 </template>
 
