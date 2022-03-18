@@ -15,7 +15,7 @@
 import NavBar from "../components/NavBar.vue";
 import SetProfile from "../components/SetProfile.vue";
 import TweetModal from "../components/TweetModal.vue";
-import getUserDataAPI from "./../apis/getUserData";
+import getUserDataAPI from "./../apis/userData";
 import { Toast } from "./../utils/helpers";
 import { mapState } from "vuex";
 
