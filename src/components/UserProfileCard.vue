@@ -100,7 +100,7 @@
 <script>
 import { emptyImageFilter } from "../utils/mixins";
 import { mapState } from "vuex";
-import userFollowAPI from "./../apis/userFollow";
+import userFollowAPI from "./../apis/followData";
 import { Toast } from "./../utils/helpers";
 
 export default {

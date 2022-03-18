@@ -65,7 +65,7 @@
 <script>
 import { emptyImageFilter } from "../utils/mixins";
 import { formatDateFilter } from "./../utils/mixins";
-import tweetAPI from "../apis/tweetCards";
+import tweetAPI from "../apis/tweetData";
 import { Toast } from "../utils/helpers";
 import { mapState } from "vuex";
 
