@@ -4,7 +4,7 @@
     <div class="popular-card">
       <div
         class="card-body"
-        v-for="user in $options.filters.howManyUsers(popularUsers)"
+        v-for="user in specificAmountUsers"
         :key="user.id"
         :class="{ active: isActive }"
       >
@@ -57,15 +57,19 @@ export default {
   mixins: [emptyImageFilter],
   data() {
     return {
-      users: [],
-      sixUser: [],
-      showCardUsers: [],
+      // users: [],
+      // sixUser: [],
+      // showCardUsers: [],
+      completeUsers: [],
       isActive: false,
       isProcessing: false,
     };
   },
   computed: {
     ...mapState(["popularUsers", "currentUser"]),
+    specificAmountUsers: function () {
+      return this.isActive ? this.popularUsers : this.popularUsers.slice(0, 6);
+    }
   },
   created() {
     this.fetchUsers();
@@ -150,6 +154,7 @@ export default {
     },
     addCards() {
       this.isActive = true;
+      this.howManyUsers();
       // this.showCardUsers = this.isActive ? this.users : this.sixUser;
     },
     toUserPage(userID) {
@@ -175,6 +180,7 @@ export default {
   },
   filters: {
     howManyUsers: function (users) {
+      this.completeUsers = users;
       return this.isActive ? users : users.slice(0, 6);
     },
   },
