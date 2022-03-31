@@ -37,8 +37,10 @@
 
 <script>
 import { emptyImageFilter } from "../utils/mixins";
-import userFollowAPI from "./../apis/followData";
 import { Toast } from "./../utils/helpers";
+import userFollowAPI from "./../apis/followData";
+import store from "./../store";
+import { mapState } from "vuex";
 
 export default {
   name: "FollowCards",
@@ -55,42 +57,60 @@ export default {
       isProcessing: false,
     };
   },
+  computed: {
+    ...mapState(["userFollowings", "userFollowers"]),
+  },
   created() {
     this.fetchCardsData();
   },
   methods: {
     // TODO: isLoading
+    // async fetchCardsData() {
+    //   const { id: userId } = this.$route.params;
+    //   try {
+    //     if (this.dataId === 1) {
+    //       // 串接跟隨者
+    //       let response = await userFollowAPI.getUserFollowers(userId);
+    //       const { data } = response;
+    //       this.currentCardUsers = data;
+    //       if (data.length === 0) {
+    //         Toast.fire({
+    //           icon: "warning",
+    //           title: "沒有跟隨者",
+    //         });
+    //       }
+    //     } else {
+    //       // 串接正在跟隨的使用者
+    //       let response = await userFollowAPI.getUserFollowings(userId);
+    //       const { data } = response;
+    //       this.currentCardUsers = data;
+    //       if (data.length === 0) {
+    //         Toast.fire({
+    //           icon: "warning",
+    //           title: "沒有正在跟隨的使用者",
+    //         });
+    //       }
+    //     }
+    //   } catch (e) {
+    //     Toast.fire({
+    //       icon: "warning",
+    //       title: e.response.data.message,
+    //     });
+    //   }
+    // },
     async fetchCardsData() {
       const { id: userId } = this.$route.params;
       try {
         if (this.dataId === 1) {
           // 串接跟隨者
-          let response = await userFollowAPI.getUserFollowers(userId);
-          const { data } = response;
-          this.currentCardUsers = data;
-          if (data.length === 0) {
-            Toast.fire({
-              icon: "warning",
-              title: "沒有跟隨者",
-            });
-          }
+          this.currentCardUsers = this.userFollowers;
         } else {
+          await store.dispatch('fetchUserFollowings', { userId })
           // 串接正在跟隨的使用者
-          let response = await userFollowAPI.getUserFollowings(userId);
-          const { data } = response;
-          this.currentCardUsers = data;
-          if (data.length === 0) {
-            Toast.fire({
-              icon: "warning",
-              title: "沒有正在跟隨的使用者",
-            });
-          }
+          this.currentCardUsers = this.userFollowings;
         }
-      } catch (e) {
-        Toast.fire({
-          icon: "warning",
-          title: e.response.data.message,
-        });
+      } catch (error) {
+        console.log(error)
       }
     },
     async addIsFollow(userId) {
