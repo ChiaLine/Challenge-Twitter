@@ -184,6 +184,7 @@ export default {
         this.isProcessing = true;
         await userFollowAPI.addFollowed({ id: userId });
         await this.fetchCardsData();
+        await store.dispatch("fetchPopularUsers");
         Toast.fire({
           icon: "success",
           title: "成功加入跟隨",
@@ -203,6 +204,7 @@ export default {
         this.isProcessing = true;
         await userFollowAPI.DeleteFollowed(userId);
         await this.fetchCardsData();
+        await store.dispatch("fetchPopularUsers");
         Toast.fire({
           icon: "success",
           title: "成功取消跟隨",

@@ -4,7 +4,7 @@
     <div class="popular-card">
       <div
         class="card-body"
-        v-for="user in showCardUsers"
+        v-for="user in $options.filters.howManyUsers(popularUsers)"
         :key="user.id"
         :class="{ active: isActive }"
       >
@@ -87,9 +87,9 @@ export default {
     async fetchUsers() {
       try {
         await store.dispatch("fetchPopularUsers");
-        this.users = this.popularUsers;
-        this.sixUser = this.popularUsers.slice(0, 6);
-        this.showCardUsers = this.isActive ? this.users : this.sixUser;
+        // this.users = this.popularUsers;
+        // this.sixUser = this.popularUsers.slice(0, 6);
+        // this.showCardUsers = this.isActive ? this.users : this.sixUser;
       } catch (error) {
         console.log(error)
       }
@@ -138,7 +138,7 @@ export default {
     },
     addCards() {
       this.isActive = true;
-      this.showCardUsers = this.isActive ? this.users : this.sixUser;
+      // this.showCardUsers = this.isActive ? this.users : this.sixUser;
     },
     toUserPage(userID) {
       // 取卡片使用者id
@@ -161,6 +161,11 @@ export default {
       }
     },
   },
+  filters: {
+    howManyUsers: function (users) {
+      return this.isActive ? users : users.slice(0, 6);
+    }
+  }
 };
 </script>
 
