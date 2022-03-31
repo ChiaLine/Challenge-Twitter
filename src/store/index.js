@@ -122,7 +122,6 @@ export default new Vuex.Store({
     },
     async fetchUserFollowers({ commit }, { userId }) {
       try {
-        console.log("get followers")
         const { data } = await userFollowAPI.getUserFollowers(userId);
         commit('setUserFollowers', data)
         if (data.length === 0) {

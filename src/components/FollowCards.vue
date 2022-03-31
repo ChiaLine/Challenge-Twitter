@@ -121,7 +121,6 @@ export default {
   mixins: [emptyImageFilter],
   data() {
     return {
-      currentCardUsers: [],
       isProcessing: false,
     };
   },
@@ -170,13 +169,11 @@ export default {
       const { id: userId } = this.$route.params;
       try {
         if (this.dataId === 1) {
-          // 串接跟隨者
+          // 呼叫 vuex 串接跟隨者
           await store.dispatch("fetchUserFollowers", { userId });
-          this.currentCardUsers = this.userFollowers;
         } else {
-          // 串接正在跟隨的使用者
+          // 呼叫 vuex 串接正在跟隨的使用者
           await store.dispatch("fetchUserFollowings", { userId });
-          this.currentCardUsers = this.userFollowings;
         }
       } catch (error) {
         console.log(error);
@@ -192,7 +189,7 @@ export default {
           title: "成功加入跟隨",
         });
         this.isProcessing = false;
-        this.$router.go(0);
+        // this.$router.go(0);
       } catch (e) {
         Toast.fire({
           icon: "error",
@@ -211,7 +208,7 @@ export default {
           title: "成功取消跟隨",
         });
         this.isProcessing = false;
-        this.$router.go(0);
+        // this.$router.go(0);
       } catch (e) {
         Toast.fire({
           icon: "error",
