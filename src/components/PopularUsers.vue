@@ -65,7 +65,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["popularUsers"]),
+    ...mapState(["popularUsers", "currentUser"]),
   },
   created() {
     this.fetchUsers();
@@ -91,14 +91,17 @@ export default {
         // this.sixUser = this.popularUsers.slice(0, 6);
         // this.showCardUsers = this.isActive ? this.users : this.sixUser;
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     },
     async addIsFollowed(userId) {
+      const currentUserId = this.currentUser.id;
+      console.log(currentUserId);
       try {
         this.isProcessing = true;
         await popularListAPI.addFollowed({ id: userId });
         await this.fetchUsers();
+        await this.updateFollowCards();
 
         Toast.fire({
           icon: "success",
@@ -106,7 +109,7 @@ export default {
         });
 
         this.isProcessing = false;
-        this.$router.go(0);
+        // this.$router.go(0);
       } catch (error) {
         this.isProcessing = false;
         Toast.fire({
@@ -116,10 +119,13 @@ export default {
       }
     },
     async deleteIsFollowed(userId) {
+      const currentUserId = this.currentUser.id;
+      console.log(currentUserId);
       try {
         this.isProcessing = true;
         await popularListAPI.DeleteFollowed(userId);
         await this.fetchUsers();
+        await this.updateFollowCards();
 
         Toast.fire({
           icon: "success",
@@ -127,13 +133,19 @@ export default {
         });
 
         this.isProcessing = false;
-        this.$router.go(0);
+        // this.$router.go(0);
       } catch (error) {
         this.isProcessing = false;
         Toast.fire({
           icon: "error",
           title: "無法取消追蹤，請稍後再試..",
         });
+      }
+    },
+    async updateFollowCards() {
+      if (this.$route.params) {
+        const { id: userId } = this.$route.params;
+        await store.dispatch("fetchUserFollowings", { userId });
       }
     },
     addCards() {
@@ -143,8 +155,8 @@ export default {
     toUserPage(userID) {
       // 取卡片使用者id
       if (this.$route.name !== "UserOther") {
-        this.$router.push({ name: 'UserOther', params: { id: userID } });
-        return
+        this.$router.push({ name: "UserOther", params: { id: userID } });
+        return;
       }
 
       if (this.$route.name === "UserOther") {
@@ -164,8 +176,8 @@ export default {
   filters: {
     howManyUsers: function (users) {
       return this.isActive ? users : users.slice(0, 6);
-    }
-  }
+    },
+  },
 };
 </script>
 
