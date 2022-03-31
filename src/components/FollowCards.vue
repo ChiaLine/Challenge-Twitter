@@ -103,14 +103,15 @@ export default {
       try {
         if (this.dataId === 1) {
           // 串接跟隨者
+          await store.dispatch("fetchUserFollowers", { userId });
           this.currentCardUsers = this.userFollowers;
         } else {
-          await store.dispatch('fetchUserFollowings', { userId })
           // 串接正在跟隨的使用者
+          await store.dispatch("fetchUserFollowings", { userId });
           this.currentCardUsers = this.userFollowings;
         }
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     },
     async addIsFollow(userId) {

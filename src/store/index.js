@@ -77,9 +77,12 @@ export default new Vuex.Store({
       // 登出時將 token 移除
       localStorage.removeItem('adminToken')
     },
-    setUserFollowings(state, userFollowings) {
-      state.userFollowings = userFollowings;
-    }
+    setUserFollowings(state, newUserFollowings) {
+      state.userFollowings = newUserFollowings;
+    },
+    setUserFollowers(state, newUserFollowers) {
+      state.userFollowers = newUserFollowers;
+    },
   },
   actions: {
     async fetchCurrentUser({ commit }) {
@@ -105,6 +108,23 @@ export default new Vuex.Store({
           Toast.fire({
             icon: "warning",
             title: "沒有正在跟隨的使用者",
+          });
+        }
+      } catch (error) {
+        Toast.fire({
+          icon: "warning",
+          title: error.response.data.message,
+        });
+      }
+    },
+    async fetchUserFollowers({ commit }, { userId }) {
+      try {
+        const { data } = await userFollowAPI.getUserFollowers(userId);
+        commit('setUserFollowers', data)
+        if (data.length === 0) {
+          Toast.fire({
+            icon: "warning",
+            title: "沒有跟隨者",
           });
         }
       } catch (error) {
