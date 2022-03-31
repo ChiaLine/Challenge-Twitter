@@ -1,6 +1,74 @@
 <template>
   <div class="follow-cards">
-    <div
+    <template v-if="dataId === 1">
+      <div
+        v-for="user in userFollowers"
+        :key="user.id"
+        class="follow-card d-flex"
+      >
+        <img :src="user.avatar | emptyImage" alt="avatar" />
+        <div class="text-area flex-grow-1 d-flex flex-column">
+          <div class="d-flex justify-content-between">
+            <div class="d-flex flex-column">
+              <p class="name">{{ user.name }}</p>
+              <p class="account">@{{ user.account }}</p>
+            </div>
+            <button
+              v-if="user.isFollowed"
+              @click.stop.prevent="deleteIsFollow(user.id)"
+              class="btn following-btn"
+              :disabled="isProcessing"
+            >
+              正在跟隨
+            </button>
+            <button
+              v-else
+              @click.stop.prevent="addIsFollow(user.id)"
+              class="btn follow-btn"
+              :disabled="isProcessing"
+            >
+              跟隨
+            </button>
+          </div>
+          <p class="introduction">{{ user.introduction }}</p>
+        </div>
+      </div>
+    </template>
+    <template v-else>
+      <div
+        v-for="user in userFollowings"
+        :key="user.id"
+        class="follow-card d-flex"
+      >
+        <img :src="user.avatar | emptyImage" alt="avatar" />
+        <div class="text-area flex-grow-1 d-flex flex-column">
+          <div class="d-flex justify-content-between">
+            <div class="d-flex flex-column">
+              <p class="name">{{ user.name }}</p>
+              <p class="account">@{{ user.account }}</p>
+            </div>
+            <button
+              v-if="user.isFollowed"
+              @click.stop.prevent="deleteIsFollow(user.id)"
+              class="btn following-btn"
+              :disabled="isProcessing"
+            >
+              正在跟隨
+            </button>
+            <button
+              v-else
+              @click.stop.prevent="addIsFollow(user.id)"
+              class="btn follow-btn"
+              :disabled="isProcessing"
+            >
+              跟隨
+            </button>
+          </div>
+          <p class="introduction">{{ user.introduction }}</p>
+        </div>
+      </div>
+    </template>
+    <!-- <div
       v-for="user in currentCardUsers"
       :key="user.id"
       class="follow-card d-flex"
@@ -31,7 +99,7 @@
         </div>
         <p class="introduction">{{ user.introduction }}</p>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
