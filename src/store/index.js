@@ -105,7 +105,9 @@ export default new Vuex.Store({
     },
     async fetchUserFollowings({ commit }, { userId }) {
       try {
+        // 獲取指定 user 的 followings 資料
         const { data } = await userFollowAPI.getUserFollowings(userId);
+        // 更新 vuex 裡面指定 user 的 followings 資料
         commit('setUserFollowings', data)
         if (data.length === 0) {
           Toast.fire({
@@ -122,7 +124,9 @@ export default new Vuex.Store({
     },
     async fetchUserFollowers({ commit }, { userId }) {
       try {
+        // 獲取指定 user 的 followers 資料
         const { data } = await userFollowAPI.getUserFollowers(userId);
+        // 更新 vuex 裡面指定 user 的 followers 資料
         commit('setUserFollowers', data)
         if (data.length === 0) {
           Toast.fire({
@@ -139,7 +143,9 @@ export default new Vuex.Store({
     },
     async fetchPopularUsers({ commit }) {
       try {
+        // 獲取熱門用戶資料
         const { data } = await userFollowAPI.getPopularList();
+        // 更新 vuex 裡面的熱門用戶資料
         commit('setPopularUsers', data)
       } catch (error) {
         Toast.fire({

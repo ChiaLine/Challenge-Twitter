@@ -57,50 +57,32 @@ export default {
   mixins: [emptyImageFilter],
   data() {
     return {
-      // users: [],
-      // sixUser: [],
-      // showCardUsers: [],
-      completeUsers: [],
       isActive: false,
       isProcessing: false,
     };
   },
   computed: {
-    ...mapState(["popularUsers", "currentUser"]),
+    // 當 vuex 的 popularUsers 改變，得到新資料
+    ...mapState(["popularUsers"]),
+    // 當 isActive 或 popularUsers，更新 specificAmountUsers 並重新渲染
     specificAmountUsers: function () {
+      // 顯示六位或十位熱門用戶
       return this.isActive ? this.popularUsers : this.popularUsers.slice(0, 6);
-    }
+    },
   },
   created() {
     this.fetchUsers();
   },
   methods: {
-    // async fetchUsers() {
-    //   try {
-    //     const { data } = await popularListAPI.getPopularList();
-    //     this.users = data;
-    //     this.sixUser = data.slice(0, 6);
-    //     this.showCardUsers = this.isActive ? this.users : this.sixUser;
-    //   } catch (error) {
-    //     Toast.fire({
-    //       icon: "error",
-    //       title: "無法取得熱門用戶資料，請稍後再試..",
-    //     });
-    //   }
-    // },
     async fetchUsers() {
       try {
+        // 呼叫 vuex 串接熱門用戶資料
         await store.dispatch("fetchPopularUsers");
-        // this.users = this.popularUsers;
-        // this.sixUser = this.popularUsers.slice(0, 6);
-        // this.showCardUsers = this.isActive ? this.users : this.sixUser;
       } catch (error) {
         console.log(error);
       }
     },
     async addIsFollowed(userId) {
-      const currentUserId = this.currentUser.id;
-      console.log(currentUserId);
       try {
         this.isProcessing = true;
         await popularListAPI.addFollowed({ id: userId });
@@ -113,7 +95,6 @@ export default {
         });
 
         this.isProcessing = false;
-        // this.$router.go(0);
       } catch (error) {
         this.isProcessing = false;
         Toast.fire({
@@ -123,8 +104,6 @@ export default {
       }
     },
     async deleteIsFollowed(userId) {
-      const currentUserId = this.currentUser.id;
-      console.log(currentUserId);
       try {
         this.isProcessing = true;
         await popularListAPI.DeleteFollowed(userId);
@@ -137,7 +116,6 @@ export default {
         });
 
         this.isProcessing = false;
-        // this.$router.go(0);
       } catch (error) {
         this.isProcessing = false;
         Toast.fire({
@@ -146,16 +124,16 @@ export default {
         });
       }
     },
+    // 同步更新 Follow 頁面資料
     async updateFollowCards() {
       if (this.$route.params) {
         const { id: userId } = this.$route.params;
         await store.dispatch("fetchUserFollowings", { userId });
+        await store.dispatch("fetchUserFollowers", { userId });
       }
     },
     addCards() {
       this.isActive = true;
-      this.howManyUsers();
-      // this.showCardUsers = this.isActive ? this.users : this.sixUser;
     },
     toUserPage(userID) {
       // 取卡片使用者id
@@ -176,12 +154,6 @@ export default {
         // 強制重整
         window.location.reload();
       }
-    },
-  },
-  filters: {
-    howManyUsers: function (users) {
-      this.completeUsers = users;
-      return this.isActive ? users : users.slice(0, 6);
     },
   },
 };

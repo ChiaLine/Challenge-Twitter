@@ -68,38 +68,6 @@
         </div>
       </div>
     </template>
-    <!-- <div
-      v-for="user in currentCardUsers"
-      :key="user.id"
-      class="follow-card d-flex"
-    >
-      <img :src="user.avatar | emptyImage" alt="avatar" />
-      <div class="text-area flex-grow-1 d-flex flex-column">
-        <div class="d-flex justify-content-between">
-          <div class="d-flex flex-column">
-            <p class="name">{{ user.name }}</p>
-            <p class="account">@{{ user.account }}</p>
-          </div>
-          <button
-            v-if="user.isFollowed"
-            @click.stop.prevent="deleteIsFollow(user.id)"
-            class="btn following-btn"
-            :disabled="isProcessing"
-          >
-            正在跟隨
-          </button>
-          <button
-            v-else
-            @click.stop.prevent="addIsFollow(user.id)"
-            class="btn follow-btn"
-            :disabled="isProcessing"
-          >
-            跟隨
-          </button>
-        </div>
-        <p class="introduction">{{ user.introduction }}</p>
-      </div>
-    </div> -->
   </div>
 </template>
 
@@ -125,6 +93,7 @@ export default {
     };
   },
   computed: {
+    // 當 vuex 的 userFollowings, userFollowers 改變，得到新資料並重新渲染
     ...mapState(["userFollowings", "userFollowers"]),
   },
   created() {
@@ -132,39 +101,6 @@ export default {
   },
   methods: {
     // TODO: isLoading
-    // async fetchCardsData() {
-    //   const { id: userId } = this.$route.params;
-    //   try {
-    //     if (this.dataId === 1) {
-    //       // 串接跟隨者
-    //       let response = await userFollowAPI.getUserFollowers(userId);
-    //       const { data } = response;
-    //       this.currentCardUsers = data;
-    //       if (data.length === 0) {
-    //         Toast.fire({
-    //           icon: "warning",
-    //           title: "沒有跟隨者",
-    //         });
-    //       }
-    //     } else {
-    //       // 串接正在跟隨的使用者
-    //       let response = await userFollowAPI.getUserFollowings(userId);
-    //       const { data } = response;
-    //       this.currentCardUsers = data;
-    //       if (data.length === 0) {
-    //         Toast.fire({
-    //           icon: "warning",
-    //           title: "沒有正在跟隨的使用者",
-    //         });
-    //       }
-    //     }
-    //   } catch (e) {
-    //     Toast.fire({
-    //       icon: "warning",
-    //       title: e.response.data.message,
-    //     });
-    //   }
-    // },
     async fetchCardsData() {
       const { id: userId } = this.$route.params;
       try {
@@ -190,7 +126,6 @@ export default {
           title: "成功加入跟隨",
         });
         this.isProcessing = false;
-        // this.$router.go(0);
       } catch (e) {
         Toast.fire({
           icon: "error",
@@ -210,7 +145,6 @@ export default {
           title: "成功取消跟隨",
         });
         this.isProcessing = false;
-        // this.$router.go(0);
       } catch (e) {
         Toast.fire({
           icon: "error",
@@ -222,6 +156,7 @@ export default {
   },
   watch: {
     dataId: function () {
+      // dataId 改變時，更新卡片資料
       this.fetchCardsData();
     },
   },
