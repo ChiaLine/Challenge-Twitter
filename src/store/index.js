@@ -83,6 +83,9 @@ export default new Vuex.Store({
     setUserFollowers(state, newUserFollowers) {
       state.userFollowers = newUserFollowers;
     },
+    setPopularUsers(state, newPopularUsers) {
+      state.popularUsers = newPopularUsers;
+    }
   },
   actions: {
     async fetchCurrentUser({ commit }) {
@@ -131,6 +134,17 @@ export default new Vuex.Store({
         Toast.fire({
           icon: "warning",
           title: error.response.data.message,
+        });
+      }
+    },
+    async fetchPopularUsers({ commit }) {
+      try {
+        const { data } = await userFollowAPI.getPopularList();
+        commit('setPopularUsers', data)
+      } catch (error) {
+        Toast.fire({
+          icon: "error",
+          title: "無法取得熱門用戶資料，請稍後再試..",
         });
       }
     }

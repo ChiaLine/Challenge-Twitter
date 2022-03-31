@@ -49,6 +49,8 @@
 import popularListAPI from "../apis/followData";
 import { Toast } from "../utils/helpers";
 import { emptyImageFilter } from "../utils/mixins";
+import store from "./../store";
+import { mapState } from "vuex";
 
 export default {
   name: "PopularUsers",
@@ -62,21 +64,34 @@ export default {
       isProcessing: false,
     };
   },
+  computed: {
+    ...mapState(["popularUsers"]),
+  },
   created() {
     this.fetchUsers();
   },
   methods: {
+    // async fetchUsers() {
+    //   try {
+    //     const { data } = await popularListAPI.getPopularList();
+    //     this.users = data;
+    //     this.sixUser = data.slice(0, 6);
+    //     this.showCardUsers = this.isActive ? this.users : this.sixUser;
+    //   } catch (error) {
+    //     Toast.fire({
+    //       icon: "error",
+    //       title: "無法取得熱門用戶資料，請稍後再試..",
+    //     });
+    //   }
+    // },
     async fetchUsers() {
       try {
-        const { data } = await popularListAPI.getPopularList();
-        this.users = data;
-        this.sixUser = data.slice(0, 6);
+        await store.dispatch("fetchPopularUsers");
+        this.users = this.popularUsers;
+        this.sixUser = this.popularUsers.slice(0, 6);
         this.showCardUsers = this.isActive ? this.users : this.sixUser;
       } catch (error) {
-        Toast.fire({
-          icon: "error",
-          title: "無法取得熱門用戶資料，請稍後再試..",
-        });
+        console.log(error)
       }
     },
     async addIsFollowed(userId) {
