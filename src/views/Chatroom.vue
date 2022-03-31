@@ -137,30 +137,23 @@ export default {
     },
     sendMessage() {
       if (this.inputMessage) {
-        console.log("sendMessage: ", this.inputMessage);
         this.$socket.client.emit("public message", this.inputMessage);
         this.inputMessage = "";
       }
     },
-    // 頁面切換到公開聊天室時呼叫(created)
+    // 頁面切換 進入公開聊天室時呼叫(created)
     connectUser() {
-      console.log("進入聊天室");
       this.$socket.client.emit("enter chatroom");
     },
-    // 頁面離開公開聊天室時呼叫(beforeDestroy)
+    // 頁面切換 離開公開聊天室時呼叫(beforeDestroy)
     disconnectUser() {
-      console.log("離開聊天室");
       this.$socket.client.emit("leave chatroom");
     },
   },
   // 監聽事件放的位置
   sockets: {
-    connect: function () {
-      console.log("web socket success");
-    },
     // 獲取歷史聊天紀錄（後端只有在被告知使用者上線時，才會送出）
     [`render public messages`]: function (data) {
-      console.log("msg清單: ", data);
       for (let i = 0; i < data.length; i++) {
         const msg = data[i];
         if (msg.senderId === this.currentUser.id) {
@@ -186,14 +179,12 @@ export default {
         }
       }
     },
-    // 這是接收目前在聊天室的使用者清單
+    // 接收目前在聊天室的使用者清單
     users: function (users) {
-      console.log("目前在聊天室的使用者清單: ", users);
       this.users = users;
     },
     // 接收訊息其他使用者、自己的文字訊息
     [`public message`]: function (msg) {
-      console.log("接收訊息: ", msg);
       if (msg.senderId === this.currentUser.id) {
         const thisMessage = {
           id: -1,
@@ -216,9 +207,8 @@ export default {
         this.messages.unshift(thisMessage);
       }
     },
-    // 接收並顯示使用者上線通知
+    // 接收並顯示使用者 上線通知訊息
     [`user connect`]: function (msg) {
-      console.log("使用者上線通知: ", msg);
       const thisMessage = {
         id: -1,
         content: msg,
@@ -229,9 +219,8 @@ export default {
       };
       this.messages.unshift(thisMessage);
     },
-    // 接收並顯示使用者離線通知
+    // 接收並顯示使用者 離線通知訊息
     [`user disconnect`]: function (msg) {
-      console.log("使用者離線通知: ", msg);
       const thisMessage = {
         id: -1,
         content: msg,
@@ -244,10 +233,8 @@ export default {
     },
   },
   created() {
-    console.log("previousMessages", this.previousMessages.length);
     // 告知伺服器使用者上線
     this.connectUser();
-    alert("您確定要進入公開聊天室嗎？ 若是，請按下確定");
   },
   beforeDestroy() {
     // 離開頁面時告知後端伺服器
@@ -268,14 +255,12 @@ export default {
 
 /* 左區卡片 */
 .chatroom-users {
-  // min-width: 390px;
   width: 100%;
   border-left: 1px solid #e6ecf0;
   border-right: 1px solid #e6ecf0;
 }
 
 .chatroom-content {
-  // min-width: 600px;
   width: 100%;
   height: 100%;
   display: flex;
