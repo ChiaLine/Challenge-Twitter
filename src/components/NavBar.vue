@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar ">
+  <nav class="navbar navbar-none">
     <div class="navbar-logo">
       <a class="navbar-link" href="#/User">
         <img src="https://i.imgur.com/WwFWS1D.png" />
@@ -20,15 +20,17 @@
         >
           <img class="navbar-icon home" :src="item.iconActive" v-if="item.active"/>
           <img class="navbar-icon home" :src="item.icon" v-else/>
+          <span class="navbar-title-hover">{{ item.title }}</span>
           <span class="navbar-title-none">{{ item.title }}</span>
         </router-link>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" @click="logout">
         <router-link
           class="nav-link"
           :to="{name: 'Login'}">
           <img class="navbar-icon home" src="https://i.imgur.com/trtoBHw.png"/>
-          <span @click="logout">登出</span>
+          <span class="navbar-title-hover">登出</span>
+          <span class="navbar-title-none">登出</span>
         </router-link>
       </li>
     </ul>
