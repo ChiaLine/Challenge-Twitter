@@ -20,15 +20,18 @@
         >
           <img class="navbar-icon home" :src="item.iconActive" v-if="item.active"/>
           <img class="navbar-icon home" :src="item.icon" v-else/>
-          <span>{{ item.title }}</span>
+          <span class="navbar-title-hover">{{ item.title }}</span>
+          <span class="navbar-title-none">{{ item.title }}</span>
+          <!-- <span>{{ item.title }}</span> -->
         </router-link>
       </li>
-      <li class="nav-item" @click="logut">
+      <li class="nav-item" @click="logout">
         <router-link
           class="nav-link"
           :to="{name: 'AdminLogin'}">
           <img class="navbar-icon home" src="https://i.imgur.com/trtoBHw.png"/>
-          <span>登出</span>
+          <span class="navbar-title-hover">登出</span>
+          <span class="navbar-title-none">登出</span>
         </router-link>
       </li>
     </ul>
@@ -97,7 +100,7 @@ export default {
         }
       })
     },
-    logut(){
+    logout(){
       this.$store.commit("revokeAdminUser");
     }
   }
