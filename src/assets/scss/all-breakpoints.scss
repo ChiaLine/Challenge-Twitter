@@ -1,14 +1,28 @@
 // 設定斷點
 @media screen and (max-width: 767px) {
-  .user {
-    background-color: rgb(154, 154, 154);
+  // 導覽列 調整為上方位置
+  // 圖示調整橫排
+  .navbar-nav {
+    border-bottom: 1px solid #e6ecf0;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-evenly;
   }
-  // 導覽列 關
+  // 取消 登出定位
+  .navbar-nav .nav-item:last-child {
+    position: static;
+  }
+  // 關閉 導覽列 logo button
+  .navbar-logo, .navbar-button {
+    display: none;
+  }
+
+  // 關閉 導覽列 
   .navbar.navbar-none {
     // display: none;
   }
 
-  // 導覽列圖示文字 關
+  // 關閉 導覽列圖示文字
   .navbar-title-none {
     display: none;
   }
@@ -24,11 +38,16 @@
   // 滑鼠移動 開 提示字
   .nav-item:hover .navbar-title-hover {
     position: absolute;
-    left: 100%;
+    width: 200px;
+    top: 55%;
     z-index: 2;
     display: block;
   }
 
+  // 關閉 私人聊天室區
+  .message-description,.message-time,.message-account, .chatroom-card-account {
+    display: none;
+  }
 }
 
 @media screen and (min-width: 768px) {
@@ -49,10 +68,13 @@
   .navbar-title-hover{
     display: none;
   }
+
+  
   // 滑鼠移動 開 提示字
   .nav-item:hover .navbar-title-hover {
     position: absolute;
-    left: 100%;
+    width: 90px;
+    top: 60%;
     z-index: 2;
     display: block;
   }
