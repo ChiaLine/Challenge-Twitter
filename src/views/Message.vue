@@ -286,14 +286,14 @@ export default {
 @import "../assets/scss/chatroom.scss";
 /* 左區卡片 */
 .message-users {
-  // width: 100%;
+  width: 40%;
   border-left: 1px solid #e6ecf0;
   border-right: 1px solid #e6ecf0;
 }
 
 /* 右區聊天室 */
 .message-content {
-  // width: 100%;
+  width: 60%;
   height: 100%;
   display: flex;
   flex-direction: column;

@@ -257,13 +257,13 @@ export default {
 
 /* 左區卡片 */
 .chatroom-users {
-  // width: 100%;
+  width: 30%;
   border-left: 1px solid #e6ecf0;
   border-right: 1px solid #e6ecf0;
 }
 
 .chatroom-content {
-  // width: 100%;
+  width: 70%;
   height: 100%;
   display: flex;
   flex-direction: column;
