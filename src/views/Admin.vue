@@ -1,7 +1,7 @@
 <template>
   <div class="admin row">
-    <AdminNavBar class="col-2"/>
-    <router-view class="col-10"/>
+    <AdminNavBar class="col-md-2"/>
+    <router-view class="col-md-10"/>
   </div>
 </template>
 
