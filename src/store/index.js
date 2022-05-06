@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import currentUserAPI from './../apis/userData'
+import userFollowAPI from './../apis/followData'
+import { Toast } from "./../utils/helpers"
 
 Vue.use(Vuex)
 
@@ -27,6 +29,10 @@ export default new Vuex.Store({
     token: '',
     // 新增後台 token
     adminToken: '',
+    // 正在檢視的特定使用者（id 判斷）跟隨、被跟隨清單
+    userFollowings: [],
+    userFollowers: [],
+    popularUsers: [],
   },
   mutations: {
     setCurrentUser(state, currentUser) {
@@ -41,7 +47,7 @@ export default new Vuex.Store({
       state.token = localStorage.getItem('token')
     },
     // 處理登出功能 透過 commit 呼叫 mutations 方法
-    revokeAuthentication (state) {
+    revokeAuthentication(state) {
       state.currentUser = {
         id: -1,
         account: "",
@@ -70,6 +76,15 @@ export default new Vuex.Store({
     revokeAdminUser() {
       // 登出時將 token 移除
       localStorage.removeItem('adminToken')
+    },
+    setUserFollowings(state, newUserFollowings) {
+      state.userFollowings = newUserFollowings;
+    },
+    setUserFollowers(state, newUserFollowers) {
+      state.userFollowers = newUserFollowers;
+    },
+    setPopularUsers(state, newPopularUsers) {
+      state.popularUsers = newPopularUsers;
     }
   },
   actions: {
@@ -86,6 +101,57 @@ export default new Vuex.Store({
         commit('revokeAuthentication')
         // 使用者Token驗證失敗 回傳..
         return false
+      }
+    },
+    async fetchUserFollowings({ commit }, { userId }) {
+      try {
+        // 獲取指定 user 的 followings 資料
+        const { data } = await userFollowAPI.getUserFollowings(userId);
+        // 更新 vuex 裡面指定 user 的 followings 資料
+        commit('setUserFollowings', data)
+        if (data.length === 0) {
+          Toast.fire({
+            icon: "warning",
+            title: "沒有正在跟隨的使用者",
+          });
+        }
+      } catch (error) {
+        Toast.fire({
+          icon: "warning",
+          title: error.response.data.message,
+        });
+      }
+    },
+    async fetchUserFollowers({ commit }, { userId }) {
+      try {
+        // 獲取指定 user 的 followers 資料
+        const { data } = await userFollowAPI.getUserFollowers(userId);
+        // 更新 vuex 裡面指定 user 的 followers 資料
+        commit('setUserFollowers', data)
+        if (data.length === 0) {
+          Toast.fire({
+            icon: "warning",
+            title: "沒有跟隨者",
+          });
+        }
+      } catch (error) {
+        Toast.fire({
+          icon: "warning",
+          title: error.response.data.message,
+        });
+      }
+    },
+    async fetchPopularUsers({ commit }) {
+      try {
+        // 獲取熱門用戶資料
+        const { data } = await userFollowAPI.getPopularList();
+        // 更新 vuex 裡面的熱門用戶資料
+        commit('setPopularUsers', data)
+      } catch (error) {
+        Toast.fire({
+          icon: "error",
+          title: "無法取得熱門用戶資料，請稍後再試..",
+        });
       }
     }
   },

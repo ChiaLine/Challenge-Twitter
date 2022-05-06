@@ -1,5 +1,5 @@
 <template>
-  <div class="user-self h-100">
+  <div class="user-self h-100 w-100">
     <UserProfileCard
       :initialUser="currentUser"
       @after-show-user-edit-modal="afterShowUserEditModal"

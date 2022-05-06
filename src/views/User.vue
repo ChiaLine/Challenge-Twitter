@@ -1,7 +1,7 @@
 <template>
   <div class="user row">
-    <NavBar class="col-2" @after-show-tweet-modal="afterShowTweetModal" />
-    <div class="col-10 d-flex">
+    <NavBar class="col-md-2" @after-show-tweet-modal="afterShowTweetModal" />
+    <div class="col-md-10 d-flex">
       <router-view
         @after-show-tweet-modal="afterShowTweetModal"
         @after-show-reply-modal="afterShowReplyModal"

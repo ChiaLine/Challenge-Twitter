@@ -1,6 +1,6 @@
 <template>
  <div class="chatroom-container">
-    <p class="chatroom-title">上線使用者 ({{users.length}})</p>
+    <p class="chatroom-title">上線 ({{users.length}})</p>
     <div class="chatroom-cards">
       <div class="chatroom-card d-flex justify-content-start align-items-center"
       v-for="user in users"

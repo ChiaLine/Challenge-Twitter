@@ -1,83 +1,49 @@
 <template>
   <div class="h-100 row">
-    <NavBar class="col-2" @after-show-tweet-modal="afterShowTweetModal" />
-
-    <!-- 左區卡片 -->
-    <div class="message-users col-4">
-      <MessageUserCards :rooms="rooms" @change-room-id="changeRoomId" />
-    </div>
-
-    <!-- 右區聊天室 -->
-    <div class="message-content col-6">
-      <!-- 新增 聊天室上方 標題區塊的 顯示判斷 -->
-      <div class="message-content-title" v-if="!thisMessageName.length">
-        <!-- 顯示空白內容 -->
+    <NavBar class="col-md-2" @after-show-tweet-modal="afterShowTweetModal" />
+    
+    <div class="col-md-10 d-flex h-100">
+      <!-- 左區卡片 -->
+      <div class="message-users">
+        <MessageUserCards :rooms="rooms" @change-room-id="changeRoomId" />
       </div>
-      <div class="message-content-title" v-else>
-        <p class="message-content-name">{{thisMessageName[0].name}}</p>
-        <span class="message-content-account">@{{thisMessageName[0].account}}</span>
-      </div>
-      <!-- 新增 聊天室底下 訊息區塊的 顯示判斷 -->
-      <div class="chatroom-container" v-if="!thisMessageName.length">
-        <!-- 新增 訊息區塊內 圖片提示 -->
-        <div class="display-container-text">
-          <div class="display-container-img">
-            <img src="https://i.imgur.com/VG0wE3w.jpg" >
-          </div>
+      <!-- 右區聊天室 -->
+      <div class="message-content">
+        <!-- 新增 聊天室上方 標題區塊的 顯示判斷 -->
+        <div class="message-content-title" v-if="!thisMessageName.length">
+          <!-- 顯示空白內容 -->
         </div>
-        <!-- 新增 訊息區塊內 輸入框禁用提示 -->
-        <div class="input-container">
-          <input
-            class="input-container-cursor-not-allowed"
-            type="text"
-            placeholder="無法輸入訊息..."
-            disabled
-          />
-          <button class="input-container-cursor-not-allowed">
-            <img src="https://i.imgur.com/Jrjlukd.jpg" />
-          </button>
+        <div class="message-content-title" v-else>
+          <p class="message-content-name">{{thisMessageName[0].name}}</p>
+          <span class="message-content-account">@{{thisMessageName[0].account}}</span>
         </div>
-      </div>
-      <div class="chatroom-container" v-else>
-        <div class="display-container">
-          <!-- 注意！訊息上下順序是相反的(column-reverse) -->
-          <!-- 判斷是哪種訊息，搭配對應的class -->
-          <div
-            v-for="message in messages"
-            :key="message.index"
-            :class="{
-              notification: message.typeId === 1,
-              'card-other': message.typeId === 2,
-              'card-self': message.typeId === 3,
-            }"
-          >
-            <!-- v-if判斷相應內容 -->
-            <!-- 1:上線離線通知 -->
-            <span v-if="message.typeId === 1">{{ message.content }}</span>
-            <!-- 2:其他使用者的訊息 -->
-            <div v-if="message.typeId === 2" class="card-other-container">
-              <div class="img-container">
-                <img :src="message.avatar | emptyImage" alt="avatar" />
-              </div>
-              <div class="content-container">
-                <div class="text">
-                  {{ message.content }}
-                </div>
-                <p class="time">{{ message.time | formatDate }}</p>
-              </div>
-            </div>
-            <!-- 3:自己的訊息 -->
-            <div v-if="message.typeId === 3" class="card-self-container">
-              <div class="text">
-                {{ message.content }}
-              </div>
-              <p class="time">{{ message.time | formatDate }}</p>
+        <!-- 新增 聊天室底下 訊息區塊的 顯示判斷 -->
+        <div class="chatroom-container" v-if="!thisMessageName.length">
+          <!-- 新增 訊息區塊內 圖片提示 -->
+          <div class="display-container-text">
+            <div class="display-container-img">
+              <img src="https://i.imgur.com/VG0wE3w.jpg" >
             </div>
           </div>
-          <!-- 秀歷史訊息 -->
-          <template v-if="previousMessages.length > 0">
+          <!-- 新增 訊息區塊內 輸入框禁用提示 -->
+          <div class="input-container">
+            <input
+              class="input-container-cursor-not-allowed"
+              type="text"
+              placeholder="無法輸入訊息..."
+              disabled
+            />
+            <button class="input-container-cursor-not-allowed">
+              <img src="https://i.imgur.com/Jrjlukd.jpg" />
+            </button>
+          </div>
+        </div>
+        <div class="chatroom-container" v-else>
+          <div class="display-container">
+            <!-- 注意！訊息上下順序是相反的(column-reverse) -->
+            <!-- 判斷是哪種訊息，搭配對應的class -->
             <div
-              v-for="message in previousMessages"
+              v-for="message in messages"
               :key="message.index"
               :class="{
                 notification: message.typeId === 1,
@@ -108,18 +74,53 @@
                 <p class="time">{{ message.time | formatDate }}</p>
               </div>
             </div>
-          </template>
-        </div>
-        <div class="input-container">
-          <input
-            @keyup.enter="sendMessage"
-            v-model="inputMessage"
-            type="text"
-            placeholder="輸入訊息..."
-          />
-          <button @click="sendMessage">
-            <img src="https://i.imgur.com/Jrjlukd.jpg" alt="" />
-          </button>
+            <!-- 秀歷史訊息 -->
+            <template v-if="previousMessages.length > 0">
+              <div
+                v-for="message in previousMessages"
+                :key="message.index"
+                :class="{
+                  notification: message.typeId === 1,
+                  'card-other': message.typeId === 2,
+                  'card-self': message.typeId === 3,
+                }"
+              >
+                <!-- v-if判斷相應內容 -->
+                <!-- 1:上線離線通知 -->
+                <span v-if="message.typeId === 1">{{ message.content }}</span>
+                <!-- 2:其他使用者的訊息 -->
+                <div v-if="message.typeId === 2" class="card-other-container">
+                  <div class="img-container">
+                    <img :src="message.avatar | emptyImage" alt="avatar" />
+                  </div>
+                  <div class="content-container">
+                    <div class="text">
+                      {{ message.content }}
+                    </div>
+                    <p class="time">{{ message.time | formatDate }}</p>
+                  </div>
+                </div>
+                <!-- 3:自己的訊息 -->
+                <div v-if="message.typeId === 3" class="card-self-container">
+                  <div class="text">
+                    {{ message.content }}
+                  </div>
+                  <p class="time">{{ message.time | formatDate }}</p>
+                </div>
+              </div>
+            </template>
+          </div>
+          <div class="input-container">
+            <input
+              @keyup.enter="sendMessage"
+              v-model="inputMessage"
+              type="text"
+              placeholder="輸入訊息..."
+            />
+            <button @click="sendMessage">
+              <img src="https://i.imgur.com/Jrjlukd.jpg" alt="" />
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -285,14 +286,14 @@ export default {
 @import "../assets/scss/chatroom.scss";
 /* 左區卡片 */
 .message-users {
-  width: 100%;
+  width: 40%;
   border-left: 1px solid #e6ecf0;
   border-right: 1px solid #e6ecf0;
 }
 
 /* 右區聊天室 */
 .message-content {
-  width: 100%;
+  width: 60%;
   height: 100%;
   display: flex;
   flex-direction: column;

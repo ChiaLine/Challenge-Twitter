@@ -1,34 +1,99 @@
 // 設定斷點
 @media screen and (max-width: 767px) {
-  .user {
-    // background-color: rgb(154, 154, 154);
+  // 導覽列 調整為上方位置
+  // 圖示調整橫排
+  .navbar-nav {
+    border-bottom: 1px solid #e6ecf0;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-evenly;
+  }
+  // 取消 登出定位
+  .navbar-nav .nav-item:last-child {
+    position: static;
+  }
+  // 關閉 導覽列 logo button
+  .navbar-logo, .navbar-button {
+    display: none;
   }
 
+  // 關閉 導覽列圖示文字
   .navbar-title-none {
+    display: none;
+  }
+
+  // 滑鼠移動 定位參考點
+  .nav-item {
+    position: relative;
+  }
+  // 滑鼠移動 關 提示字
+  .navbar-title-hover{
+    display: none;
+  }
+  // 滑鼠移動 開 提示字
+  .nav-item:hover .navbar-title-hover {
+    position: absolute;
+    width: 200px;
+    top: 55%;
+    z-index: 2;
+    display: block;
+  }
+
+  // 關閉 私人聊天室區
+  .message-description,.message-time,.message-account, .chatroom-card-account {
     display: none;
   }
 }
 
 @media screen and (min-width: 768px) {
-  .user {
-    // background-color: rgb(222, 66, 66);
+  // 導覽列圖示 位置調整
+  .navbar {
+    align-items: end;
   }
-
+  // 導覽列圖示文字 關
   .navbar-title-none {
     display: none;
   }
+
+  // 滑鼠移動 定位參考點
+  .nav-item {
+    position: relative;
+  }
+  // 滑鼠移動 關 提示字
+  .navbar-title-hover{
+    display: none;
+  }
+
+  
+  // 滑鼠移動 開 提示字
+  .nav-item:hover .navbar-title-hover {
+    position: absolute;
+    width: 90px;
+    top: 60%;
+    z-index: 2;
+    display: block;
+  }
+
 }
 
 @media screen and (min-width: 1024px) {
-  .user {
-    // background-color: rgb(176, 224, 224);
+  // 導覽列圖示 位置調整
+  .navbar {
+    align-items: stretch;
   }
 
+  // 熱門列表 關
   .popular {
     display: block;
   }
 
+  // 導覽列圖示文字 關
   .navbar-title-none {
     display: block;
+  }
+
+  // 滑鼠移動 關 提示字
+  .nav-item:hover .navbar-title-hover {
+    display: none;
   }
 }

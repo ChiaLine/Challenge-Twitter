@@ -1,7 +1,7 @@
 <template>
   <div class="row">
-    <NavBar class="col-2" @after-show-tweet-modal="afterShowTweetModal" />
-    <div class="setting-main col-10">
+    <NavBar class="col-md-2" @after-show-tweet-modal="afterShowTweetModal" />
+    <div class="setting-main col-md-10">
       <h5 class="setting-title p-3">帳戶設定</h5>
       <div class="setting-form">
         <SetProfile class="p-3" @after-submit="handleAfterSubmit" />
